@@ -204,6 +204,20 @@
   .tbl th{font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-weight:400}
   .tbl td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--text)}
 
+  /* cardio */
+  .block.cardio{border-color:var(--cardio);background:color-mix(in srgb,var(--cardio) 7%,transparent)}
+  .block.cardio .pill{background:color-mix(in srgb,var(--cardio) 16%,transparent);color:var(--cardio);border-color:color-mix(in srgb,var(--cardio) 35%,transparent)}
+  .block.cardio.isdone .check{background:var(--accent);border-color:var(--accent)}
+  .block.cardio.isdone .check svg{display:block}
+  .copts{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:7px;margin:9px 0}
+  .copt{display:flex;flex-direction:column;gap:3px;text-align:left;border:1px solid var(--border);background:var(--surface2);color:var(--text2);border-radius:9px;padding:9px 10px;cursor:pointer;min-width:0;transition:.15s}
+  .copt:hover{border-color:var(--cardio)}
+  .copt.on{border-color:var(--cardio);background:color-mix(in srgb,var(--cardio) 14%,var(--surface));color:var(--text)}
+  .copt-n{font-weight:600;font-size:13.5px;color:var(--text)}
+  .copt-n em{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.5px;color:var(--cardio);margin-left:4px;text-transform:uppercase}
+  .copt-s{font-size:11.5px;line-height:1.45}
+  .cardio-row .eqchip.inline{margin:0 0 0 auto}
+  .shower .ex{border-top:none}
   /* gear */
   .eqchip{display:inline-flex;align-items:center;gap:6px;margin-top:7px;border:1px dashed var(--border);background:transparent;color:var(--text2);font-size:11.5px;font-weight:600;padding:5px 9px;border-radius:6px;cursor:pointer;text-align:left}
   .eqchip:hover{border-color:var(--accent);color:var(--text)}
@@ -278,7 +292,20 @@ const META = {
   dars:{ brand:"Forma Flow", sub:"Glute focus · Abduction priority",
         stats:[["FOCUS","UPPER GLUTE"],["PROTEIN","90–100 G/DAY"],["GYM","MON TUE THU SAT"],["UPPER","MAINTENANCE"]] }
 };
-const CARDIO = { don:"Bike or incline walk", dars:"StairMaster or incline walk" };
+const CARDIO = { don:"Incline treadmill or bike", dars:"StairMaster or incline treadmill" };
+const CARDIO_OPTS={
+  tread:{n:"Incline treadmill",set:"Incline 10–12%, 4.5–5.5 km/h (2.8–3.4 mph). Hands off the rails.",gear:"tread"},
+  stair:{n:"StairMaster",set:"Level 3–6, steady full steps. Light fingertip touch on the rails only.",gear:"stair"},
+  bike:{n:"Stationary bike",set:"Moderate resistance, 70–90 rpm. Seat at hip height when standing beside it.",gear:"bike"},
+  ellip:{n:"Elliptical",set:"Resistance 4–8, smooth pace, push and pull the handles.",gear:"ellip"}
+};
+const CARDIO_ORDER={don:["tread","bike","stair","ellip"],dars:["stair","tread","bike","ellip"]};
+/* suggested pick per day: easier-on-the-legs options after the heaviest leg days */
+const CARDIO_PICK={don:{Mon:"tread",Tue:"bike",Thu:"tread",Sat:"bike"},dars:{Mon:"stair",Tue:"tread",Thu:"stair",Sat:"tread"}};
+const CARDIO_WHY={
+  don:{Tue:"Bike suggested: it's easiest on legs that just squatted.",Sat:"Bike suggested after deadlifts; the treadmill is fine too."},
+  dars:{Tue:"Incline treadmill suggested for a longer, easy walk on your upper-body day.",Sat:"Incline walk suggested after the week's third glute day; StairMaster is fine if your legs feel good."}
+};
 
 /* min = planned minutes for the whole block, including rest and setup.
    Rule of thumb: heavy set ≈ 3 min, accessory set ≈ 2 min, superset round ≈ 3.5 min, +1 min per station. */
@@ -677,10 +704,10 @@ function clockHTML(dk){
     ? `You both finish lifting within ${gap||1} min of each other (about <b>${fmt(Math.max(me.end,other.end))}</b>), then do 10 min of easy cardio side by side.`
     : `<b>${NAME[first.p]}</b> finishes lifting about ${gap} min earlier (${fmt(first.end)}) and starts cardio first; the other joins at ${fmt(Math.max(me.end,other.end))}.`;
   return `<div class="clock">
-    <div class="clock-head"><span class="clock-title">Session clock · 60 min</span><span class="clock-sum">done by ${fmt(FINISH)} · 5 min spare</span></div>
+    <div class="clock-head"><span class="clock-title">Session clock · 60 min</span><span class="clock-sum">done by ${fmt(FINISH)} · 5 min spare · then shower</span></div>
     ${lanes.map(l=>l.html).join("")}
     <div class="axis"><span></span><div class="ticks"><span style="left:0">0</span><span style="left:25%">15</span><span style="left:50%">30</span><span style="left:75%">45</span><span style="left:100%">60</span></div></div>
-    <p class="lane-note">${note} Your cardio: <b>${CARDIO[profile]}</b>, ${me.cardio} min at a pace where you can still talk.</p>
+    <p class="lane-note">${note} Your cardio: <b>${me.cardio} min</b>; pick the machine in the cardio block at the bottom.</p>
     <div class="share">${esc(PROGRAMS[profile][dk].share)}</div>
   </div>`;
 }
@@ -706,6 +733,7 @@ function buildPanel(dk){
     body+=`</div>`;
   });
   const doneAll=DATA.doneDays[dk];
+  body+=cardioHTML(dk)+showerHTML();
   body+=`<div class="complete-wrap"><button class="complete-btn${doneAll?" done":""}" id="cbtn" onclick="toggleDay('${dk}')">${doneAll?"✓ Day complete":"Mark day complete"}</button></div>`;
   body+=`<div class="timer"><button class="tface" id="tface" onclick="toggleTimer()" aria-label="Rest timer">REST</button><div class="tbtns">${[60,90,120,180].map(s=>`<button onclick="startTimer(${s})">${s<120?s:(s/60)+"m"}</button>`).join("")}</div></div>`;
   p.innerHTML=head+body;
@@ -779,6 +807,7 @@ function updateProgress(dk){
   const d=PROGRAMS[profile][dk]; if(d.type!=="workout") return;
   let total=0,done=0;
   d.blocks.forEach(b=>b.ex.forEach(ex=>{ total++; const c=DATA.current[dk]&&DATA.current[dk][exId(dk,ex.n)]; if(c&&c.done) done++; }));
+  total++; if(DATA.current[dk]&&DATA.current[dk].cardio&&DATA.current[dk].cardio.done) done++;
   const f=document.getElementById("pfill"); if(f) f.style.width=Math.round(done/total*100)+"%";
 }
 function toggleDay(dk){
@@ -805,6 +834,56 @@ document.addEventListener("click",e=>{
   row.querySelectorAll(".ebtn").forEach(b=>b.classList.toggle("on",b.dataset.e===s.e));
   persist();
 });
+
+
+/* ---------- cardio + shower blocks ---------- */
+function liftEnd(p,dk){ return WARMUP+liftMinutes(p,dk); }
+function cardioState(dk){
+  if(!DATA.current[dk]) DATA.current[dk]={};
+  const c=DATA.current[dk].cardio||(DATA.current[dk].cardio={m:CARDIO_PICK[profile][dk]||CARDIO_ORDER[profile][0],min:"",done:false});
+  return c;
+}
+function cardioHTML(dk){
+  const other=PROFILES.find(x=>x!==profile);
+  const start=liftEnd(profile,dk), plan=Math.max(5,FINISH-start), oEnd=liftEnd(other,dk);
+  const c=cardioState(dk);
+  const together=oEnd>start?`${NAME[other]} joins you at about ${fmt(oEnd)}.`:(oEnd<start?`${NAME[other]} is already going; join them.`:`You start together.`);
+  const opts=CARDIO_ORDER[profile].map(k=>{ const o=CARDIO_OPTS[k];
+    return `<button class="copt${c.m===k?" on":""}" onclick="pickCardio('${dk}','${k}')" aria-pressed="${c.m===k}"><span class="copt-n">${o.n}${k===CARDIO_PICK[profile][dk]?' <em>suggested</em>':""}</span><span class="copt-s">${o.set}</span></button>`; }).join("");
+  return `<div class="block cardio${c.done?" isdone":""}" id="cardio-block">
+    <div class="block-label"><span class="pill">Cardio together · ${plan} min</span><span class="rest-lbl">start ~${fmt(start)} · end ${fmt(FINISH)}</span></div>
+    <div class="howto">Easy pace: you should be able to talk in full sentences. ${together} ${CARDIO_WHY[profile][dk]||""}</div>
+    <div class="ex" id="ex-cardio"><div class="ex-head">
+      <button class="check" onclick="toggleCardio('${dk}')" aria-label="Mark cardio done"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+      <span class="ex-num">→</span>
+      <div class="ex-body">
+        <div class="ex-name">Pick a machine</div>
+        <div class="copts">${opts}</div>
+        <div class="setrow cardio-row"><span class="setno">⏱</span><input id="cardio-min" data-dk="${dk}" inputmode="numeric" placeholder="${plan}" aria-label="Cardio minutes" value="${esc(c.min||"")}"><span class="sep">min done</span>
+          <button class="eqchip inline" onclick="openGear('${CARDIO_OPTS[c.m].gear}')">${CARDIO_OPTS[c.m].n} guide →</button></div>
+      </div></div></div>
+  </div>`;
+}
+function showerHTML(){
+  return `<div class="block finisher shower">
+    <div class="block-label"><span class="pill">After the hour · cold shower</span><span class="rest-lbl">optional · 1–3 min</span></div>
+    <div class="howto">Happens after the 60 minutes on the gym floor, in the locker room.</div>
+    <div class="ex"><div class="ex-head"><span class="ex-num">✓</span><div class="ex-body">
+      <ol class="steps"><li>Shower warm as usual to wash up.</li><li>Finish with 30–90 seconds of cold water. Breathe slowly through it.</li><li>Dry off and get some protein within a couple of hours.</li></ol>
+      <div class="tip"><strong>Keep it short</strong>Studies of longer cold-water baths (around 10 minutes in cold water) right after lifting found smaller muscle gains over time. You're both training for muscle, so stick to a short cold rinse and skip ice baths on lifting days. If you feel lightheaded, switch back to warm.</div>
+    </div></div></div>
+  </div>`;
+}
+function pickCardio(dk,k){ cardioState(dk).m=k; persist(); const host=document.getElementById("cardio-block"); host.outerHTML=cardioHTML(dk); updateProgress(dk); }
+function toggleCardio(dk){
+  const c=cardioState(dk); c.done=!c.done;
+  document.getElementById("cardio-block").classList.toggle("isdone",c.done);
+  if(c.done){ const id=dk+"__cardio"; const h=DATA.history[id]||(DATA.history[id]=[]); const today=isoDate();
+    const entry={date:today,sets:[{m:c.m,min:c.min||String(Math.max(5,FINISH-liftEnd(profile,dk)))}]};
+    const i=h.findIndex(x=>x.date===today); if(i>=0) h[i]=entry; else h.push(entry); persistHistory(id); }
+  persist(); updateProgress(dk);
+}
+document.addEventListener("input",e=>{ if(e.target.id!=="cardio-min") return; cardioState(e.target.dataset.dk).min=e.target.value; persist(); });
 
 /* rest timer */
 let tSecs=0,tRun=false,tInt=null;
@@ -860,7 +939,8 @@ function renderPlan(){
       <li><b>0:00–0:05</b> warm up together: easy bike or incline walk, then a few light sets of your first lift.</li>
       <li><b>0:05–about 0:43</b> each of you does your own lifting. Each day is planned at 34–39 min.</li>
       <li><b>About 0:43–0:55</b> easy cardio side by side. Whoever finishes lifting first starts first.</li>
-      <li><b>0:55–1:00</b> spare time for a busy machine or a stretch. You never pass the hour.</li></ul></div>
+      <li><b>0:55–1:00</b> spare time for a busy machine or a stretch. You never pass the hour.</li>
+      <li><b>After:</b> optional cold shower. Shower warm, then finish with 30–90 seconds cold. Keep it short; skip ice baths on lifting days.</li></ul></div>
     <div class="note"><h4>Finish times</h4><div class="tbl"><table class="wide"><thead><tr><th>Day</th><th>Don</th><th>Lifting ends</th><th>Dars</th><th>Lifting ends</th><th>Gap</th></tr></thead><tbody>${rows}</tbody></table></div>
       <p style="margin-top:8px">Tuesday's gap is on purpose. Dars's upper-body day is maintenance, and extra exercises would only fill time. She uses the gap for an easy incline walk.</p></div>
     <div class="note"><h4>How to progress</h4><ul>
@@ -943,6 +1023,18 @@ const GEAR={
   box:{n:"Plyo box / step",short:"Box",area:"Free weights",
     setup:"Choose a height where your thigh is about parallel with your foot on top. Check it is stable.",
     alt:"A flat bench.",q:"how to do dumbbell step up box height"},
+  tread:{n:"Treadmill (incline walk)",short:"Treadmill",area:"Cardio",
+    setup:"Clip the safety key to your clothes. Start the belt slowly, then raise the incline to 10–12%.",
+    alt:"StairMaster or bike.",q:"how to do incline treadmill walk 12 3 30 beginner"},
+  stair:{n:"StairMaster (stair climber)",short:"StairMaster",area:"Cardio",
+    setup:"Step on, choose Quick Start, set a level of 3–6. Stand tall with only a light touch on the rails.",
+    alt:"Incline treadmill.",q:"how to use stairmaster properly beginner"},
+  bike:{n:"Stationary bike",short:"Bike",area:"Cardio",
+    setup:"Seat at hip height when standing beside the bike, so your knee is slightly bent at the bottom of the pedal stroke.",
+    alt:"Elliptical or treadmill.",q:"how to set up stationary bike seat height"},
+  ellip:{n:"Elliptical",short:"Elliptical",area:"Cardio",
+    setup:"Step on, hold the handles, start pedaling to wake it up, then set resistance 4–8.",
+    alt:"Bike.",q:"how to use elliptical machine properly"},
   mat:{n:"Floor mat / stretch area",short:"Mat",area:"Bodyweight",
     setup:"Grab a mat from the stretch area.",alt:"Any clear floor space.",q:"how to do dead bug exercise"}
 };
@@ -965,7 +1057,9 @@ function renderGear(){
     d.blocks.forEach(b=>b.ex.forEach(ex=>{ const k=gearKey(ex); if(!k) return;
       if(!use[k]){ use[k]={who:new Set(),items:{}}; order.push(k); }
       use[k].who.add(p); const key=ex.n; (use[k].items[key]=use[k].items[key]||{p:new Set(),d:new Set()}); use[k].items[key].p.add(p); use[k].items[key].d.add(dk); })); }));
-  const areas=["Machines","Cables","Free weights","Bodyweight"];
+  Object.keys(CARDIO_OPTS).forEach(k=>{ const g=CARDIO_OPTS[k].gear; const who=PROFILES.filter(p=>CARDIO_ORDER[p].includes(k));
+    use[g]={who:new Set(who),items:{"Cardio finisher":{p:new Set(who),d:new Set(["Mon","Tue","Thu","Sat"])}}}; order.push(g); });
+  const areas=["Machines","Cables","Free weights","Bodyweight","Cardio"];
   let html=`<p class="prog-intro">Everything the plan uses, grouped by where it sits in the gym. Each exercise card on the Train tab links here. "How to use it" opens YouTube videos for that machine in a new tab.</p>`;
   areas.forEach(a=>{
     const ks=order.filter(k=>GEAR[k].area===a); if(!ks.length) return;
