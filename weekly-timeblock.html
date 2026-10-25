@@ -1,0 +1,231 @@
+<title>Week Block by Block</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Layout: a 7-column week board (scrolls sideways on narrow screens), then the change log and advice in two columns. */
+  :root{
+    --bg:#eef0ee; --surface:#ffffff; --surface2:#e4e8e6; --ink:#1f2a36; --ink2:#5b6672; --line:#d5dbd8;
+    --head:#1f2a36; --head-ink:#ffffff; --head-sub:#b9c3cc; --weekend:#6b7d70;
+    --move:#5d8c6a; --commute:#7f97ad; --work:#2f5e78; --home:#bf8250; --sleep:#7766a8;
+    --free:#2f8f80; --free-bg:#e2f1ee; --tag-bg:#fff1dc; --tag-ink:#8a5413;
+    --display:'Montserrat',system-ui,sans-serif; --body:'Figtree',system-ui,sans-serif;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+    --bg:#151a1f; --surface:#1e252c; --surface2:#262f37; --ink:#e7ebee; --ink2:#9ba7b1; --line:#323c45;
+    --head:#0e1216; --head-ink:#f2f4f6; --head-sub:#8f9ba5; --weekend:#4d5e52;
+    --move:#7fb38d; --commute:#93aac0; --work:#5b9cc0; --home:#d99c6a; --sleep:#9d8fd0;
+    --free:#5cc4b2; --free-bg:#1b3330; --tag-bg:#3b2d17; --tag-ink:#f0c27e; color-scheme:dark } }
+  :root[data-theme="dark"]{
+    --bg:#151a1f; --surface:#1e252c; --surface2:#262f37; --ink:#e7ebee; --ink2:#9ba7b1; --line:#323c45;
+    --head:#0e1216; --head-ink:#f2f4f6; --head-sub:#8f9ba5; --weekend:#4d5e52;
+    --move:#7fb38d; --commute:#93aac0; --work:#5b9cc0; --home:#d99c6a; --sleep:#9d8fd0;
+    --free:#5cc4b2; --free-bg:#1b3330; --tag-bg:#3b2d17; --tag-ink:#f0c27e; color-scheme:dark }
+
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;margin:0}
+  .wrap{max-width:1880px;margin:0 auto;padding-block:32px 56px;
+    padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+    display:grid;gap:28px}
+
+  header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(28px,4vw,48px);letter-spacing:-.5px;margin:0;line-height:1;text-transform:uppercase;text-wrap:balance}
+  .sub{margin:8px 0 0;color:var(--ink2);font-size:13px;letter-spacing:1.2px;text-transform:uppercase}
+  .stats{display:flex;flex-wrap:wrap;gap:10px}
+  .stat{background:var(--surface2);border-radius:12px;padding:10px 16px;min-width:0}
+  .stat b{display:block;font-family:var(--display);font-size:17px;font-variant-numeric:tabular-nums}
+  .stat span{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink2)}
+
+  .legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:var(--ink2);margin:0;padding:0;list-style:none}
+  .legend li{display:flex;align-items:center;gap:7px}
+  .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+  .legend .tagdemo{background:var(--tag-bg);color:var(--tag-ink);font-weight:600;border-radius:4px;padding:1px 6px;font-size:10px}
+
+  .board{overflow-x:auto;scroll-snap-type:x mandatory;padding:6px}
+  .week{display:grid;grid-template-columns:repeat(7,minmax(232px,1fr));gap:10px;min-width:1660px}
+  @media (max-width:1700px){ .week{min-width:0;grid-template-columns:repeat(7,260px)} }
+  @media (max-width:520px){ .week{grid-template-columns:repeat(7,82vw)} }
+  .day{display:grid;align-content:start;gap:6px;scroll-snap-align:start;min-width:0}
+  .dh{background:var(--head);color:var(--head-ink);border-radius:10px;padding:10px 14px}
+  .dh.wk{background:var(--weekend)}
+  .dh.today{outline:3px solid var(--free);outline-offset:2px}
+  .dh h2{font-family:var(--display);font-weight:800;font-size:19px;margin:0;letter-spacing:.3px;text-transform:uppercase}
+  .dh p{margin:2px 0 0;font-size:11.5px;letter-spacing:1px;text-transform:uppercase;color:var(--head-sub)}
+
+  .b{background:var(--surface);border-left:4px solid var(--c);border-radius:4px 8px 8px 4px;padding:8px 12px;min-width:0}
+  .b.free{background:var(--free-bg)}
+  .b .t{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-family:var(--display);font-weight:700;font-size:14px;font-variant-numeric:tabular-nums}
+  .b .n{font-weight:600;font-size:14px;margin-top:1px}
+  .b .d{font-size:12.5px;color:var(--ink2);margin-top:1px}
+  .tag{background:var(--tag-bg);color:var(--tag-ink);font-family:var(--body);font-weight:600;font-size:10px;letter-spacing:.8px;border-radius:4px;padding:1px 6px;white-space:nowrap}
+
+  .lower{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:28px;align-items:start}
+  section h2{font-family:var(--display);font-weight:800;font-size:18px;text-transform:uppercase;letter-spacing:.4px;margin:0 0 12px;padding-bottom:8px;border-bottom:2px solid var(--line)}
+  ol,ul.recs{margin:0;padding-left:20px;display:grid;gap:10px;max-width:70ch}
+  li strong{font-weight:600}
+  .sleep{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums;margin-bottom:14px}
+  .sleep th,.sleep td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line)}
+  .sleep th{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink2);font-weight:600}
+  .ok{color:var(--free);font-weight:600}.low{color:var(--home);font-weight:600}
+  .tbl{overflow-x:auto}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Your week, block by block</h1>
+      <p class="sub">Revised · lifting Mon Tue Thu Sat · Wed rest · Fri WFH · Sun off</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>8 h before alarm</b><span>Lights-out rule</span></div>
+      <div class="stat"><b>60 min</b><span>Full gym session</span></div>
+      <div class="stat"><b>1–2 h free</b><span>Every weeknight</span></div>
+    </div>
+  </header>
+
+  <ul class="legend" aria-label="Legend">
+    <li><span class="sw" style="background:var(--move)"></span>Move / prep</li>
+    <li><span class="sw" style="background:var(--commute)"></span>Commute</li>
+    <li><span class="sw" style="background:var(--work)"></span>Work</li>
+    <li><span class="sw" style="background:var(--home)"></span>Home / Dustin</li>
+    <li><span class="sw" style="background:var(--free)"></span>Free time</li>
+    <li><span class="sw" style="background:var(--sleep)"></span>Wind down / sleep</li>
+    <li><span class="tagdemo">CHANGED</span>Different from the old plan</li>
+  </ul>
+
+  <div class="board" id="board"><div class="week" id="week"></div></div>
+
+  <div class="lower">
+    <section>
+      <h2>What changed and why</h2>
+      <ol>
+        <li><strong>Gym is now a full 60 minutes.</strong> The old 5:15–6:15 block had to cover the drive there too, which left about 45 minutes. The Grind Log sessions are capped at 60 minutes, so the gym now runs 5:30–6:30 with 15 minutes of travel each side.</li>
+        <li><strong>Wednesday is a rest day.</strong> The old plan skipped the 5:00 wake-up but still had you at the gym at 5:15, which can't work. The Grind Log already lists Wednesday as rest, so you now sleep until 6:00 and take Dustin on a longer walk.</li>
+        <li><strong>A shower block was missing.</strong> You went from the gym straight to walking Dustin and leaving. There's now 20 minutes for a shower, getting dressed and breakfast.</li>
+        <li><strong>Cooking moved out of the morning.</strong> Cooking and packing food in the same 45 minutes as a dog walk was the tightest part of the day. Cook a double batch at dinner and pack tomorrow's lunch from it. Sunday prep covers the rest.</li>
+        <li><strong>Dinner is a real block and ends by 7:15.</strong> The old plan had cooking but no time to eat, so dinner ran into wind-down. Finishing nearly 2 hours before bed is better for sleep.</li>
+        <li><strong>Dustin gets walked as soon as you're home.</strong> He's been alone the longest by 6:00, and the walk also helps you shake off the commute.</li>
+        <li><strong>The latest lights-out is 9:30, not 10:00, before a 5:00 alarm.</strong> See the sleep math below: 10:00 puts you under 7 hours.</li>
+        <li><strong>Later nights are allowed when the next morning starts later.</strong> Wednesday, Friday and Sunday start later, so Tuesday, Thursday and Saturday nights get an extra hour of free time.</li>
+        <li><strong>Friday's blocks are filled in.</strong> They use the Grind Log's optional Friday cardio as a brisk walk with Dustin, plus the hour you'd normally spend commuting.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Sleep math</h2>
+      <div class="tbl">
+        <table class="sleep">
+          <thead><tr><th>Night</th><th>Lights out</th><th>Alarm</th><th>In bed</th><th>Likely asleep</th></tr></thead>
+          <tbody>
+            <tr><td>Sun, Mon, Wed, Fri</td><td>9:00 PM</td><td>5:00 AM</td><td>8 h</td><td class="ok">~7.5 h</td></tr>
+            <tr><td>Same, latest</td><td>9:30 PM</td><td>5:00 AM</td><td>7.5 h</td><td class="ok">~7 h</td></tr>
+            <tr><td>Old fallback</td><td>10:00 PM</td><td>5:00 AM</td><td>7 h</td><td class="low">~6.5 h ✗</td></tr>
+            <tr><td>Tue, Thu</td><td>10:00 PM</td><td>6:00 AM</td><td>8 h</td><td class="ok">~7.5 h</td></tr>
+            <tr><td>Sat</td><td>10:30 PM</td><td>6:30 AM</td><td>8 h</td><td class="ok">~7.5 h</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin:0 0 22px;color:var(--ink2);font-size:13.5px;max-width:70ch">"Likely asleep" allows about 20–30 minutes to fall asleep and for brief wake-ups. Every wake time stays within 90 minutes of 5:00, so Monday mornings won't feel like jet lag.</p>
+
+      <h2>More ideas</h2>
+      <ul class="recs">
+        <li><strong>Split the morning between you two.</strong> One of you walks Dustin while the other showers, then swap. That can give back 15–20 minutes.</li>
+        <li><strong>Treat the commute home as part of winding down.</strong> Listen to a podcast or music, and don't check work messages. The hour then counts as rest instead of more time spent on work.</li>
+        <li><strong>The 7:15 reset is what keeps mornings calm.</strong> Gym bag by the door, clothes out, lunch in the fridge. A morning with nothing to decide is how you avoid feeling like you're chasing the next day.</li>
+        <li><strong>Plan for Dustin's long days.</strong> On office days he's alone from about 7:30 to 6:00. A midday dog walker once or twice a week, or a longer Wednesday walk, helps.</li>
+        <li><strong>Leave Sunday mostly empty.</strong> Only three anchors: a long morning walk, about 2 hours of groceries and prep, and lights out by 9. The rest is yours.</li>
+        <li><strong>If a 5:00 AM is hard, skip the gym, not sleep.</strong> Sleep well and do the missed session on Friday instead of the easy cardio.</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<script>
+const C={move:'var(--move)',commute:'var(--commute)',work:'var(--work)',home:'var(--home)',free:'var(--free)',sleep:'var(--sleep)'};
+const B=(t,n,d,c,tag)=>({t,n,d,c,tag});
+
+const gymMorning=[
+  B('5:00–5:15 AM','Wake up','Water, small snack, clothes already laid out','move'),
+  B('5:15–5:30 AM','Transit to gym','','commute','CHANGED'),
+  B('5:30–6:30 AM','Gym session','Full 60 min: warm-up + Grind Log workout','move','CHANGED'),
+  B('6:30–6:45 AM','Transit home','','commute'),
+  B('6:45–7:05 AM','Walk Dustin','','home','CHANGED'),
+  B('7:05–7:25 AM','Shower, dress, breakfast','Breakfast prepped the night before','move','NEW'),
+  B('7:25–7:30 AM','Leave buffer','Grab the packed lunch from the fridge','move'),
+];
+const commuteWork=[
+  B('7:30–8:00 AM','Transit to work','','commute'),
+  B('8:00 AM–5:00 PM','At work','Meal + short breaks','work'),
+  B('5:00–6:00 PM','Transit home','Podcast or music. No work messages.','commute','CHANGED'),
+];
+const evening=(late)=>[
+  B('6:00–6:30 PM','Walk Dustin','First thing when you get home','home','CHANGED'),
+  B('6:30–7:15 PM','Cook + eat dinner','Cook double and pack tomorrow’s lunch','home','CHANGED'),
+  B('7:15–7:30 PM','10-min reset','Dishes, gym bag + clothes by the door','home','NEW'),
+  late
+    ? B('7:30–9:30 PM','Free time','Nothing scheduled. Tomorrow starts at 6:00.','free','CHANGED')
+    : B('7:30–8:30 PM','Free time','Nothing scheduled','free','CHANGED'),
+  late
+    ? B('9:30–10:00 PM','Bedtime routine','Screens off, lights low','sleep')
+    : B('8:30–9:00 PM','Bedtime routine','Screens off, lights low','sleep'),
+  late
+    ? B('10:00 PM','Lights out','Wake 6:00 → 8 h in bed','sleep','CHANGED')
+    : B('9:00 PM','Lights out','9:30 PM latest → 7.5–8 h in bed','sleep','CHANGED'),
+];
+
+const DAYS=[
+  {k:1,name:'Monday',sub:'Gym + work',blocks:[...gymMorning,...commuteWork,...evening(false)]},
+  {k:2,name:'Tuesday',sub:'Gym + work · late night',blocks:[...gymMorning,...commuteWork,...evening(true)]},
+  {k:3,name:'Wednesday',sub:'Rest day + work',blocks:[
+    B('6:00–6:15 AM','Wake up','An extra hour of sleep','move','CHANGED'),
+    B('6:15–6:50 AM','Long walk with Dustin','+ 10 min mobility from the Grind Log','home','CHANGED'),
+    B('6:50–7:25 AM','Shower + slow breakfast','No rush this morning','move','NEW'),
+    B('7:25–7:30 AM','Leave buffer','Grab the packed lunch','move'),
+    ...commuteWork,...evening(false)]},
+  {k:4,name:'Thursday',sub:'Gym + work · late night',blocks:[...gymMorning,...commuteWork,...evening(true)]},
+  {k:5,name:'Friday',sub:'Work from home',blocks:[
+    B('6:00–6:15 AM','Wake up','','move','CHANGED'),
+    B('6:15–6:45 AM','Brisk walk with Dustin','Counts as optional Zone 2 cardio','move','CHANGED'),
+    B('6:45–7:30 AM','Shower + slow breakfast','','move','CHANGED'),
+    B('7:30–8:00 AM','Free time','Coffee, or start a laundry load','free','CHANGED'),
+    B('8:00 AM–5:00 PM','Work from home','Walk Dustin at lunch','work'),
+    B('5:00–6:00 PM','Weekly reset','The hour you’d spend commuting: laundry, tidy, grocery list','home','CHANGED'),
+    B('6:00–7:15 PM','Dinner','The easy or fun one','home','CHANGED'),
+    B('7:15–8:30 PM','Free time','Nothing scheduled','free','CHANGED'),
+    B('8:30–9:00 PM','Bedtime routine','Screens off, lights low','sleep'),
+    B('9:00 PM','Lights out','Saturday is a 5:00 AM gym day','sleep'),
+  ]},
+  {k:6,name:'Saturday',sub:'Gym + work',blocks:[...gymMorning,...commuteWork,
+    B('6:00–6:30 PM','Walk Dustin','','home','CHANGED'),
+    B('6:30–7:15 PM','Cook + eat dinner','','home','CHANGED'),
+    B('7:15–10:00 PM','Free time','Your longest evening of the week','free','CHANGED'),
+    B('10:00–10:30 PM','Bedtime routine','','sleep'),
+    B('10:30 PM','Lights out','Sunday wake 6:30 → 8 h in bed','sleep','CHANGED'),
+  ]},
+  {k:0,name:'Sunday',sub:'Weekend',wk:true,blocks:[
+    B('By 6:30 AM','Wake up','Keeps Monday’s 5:00 from feeling brutal','move','NEW'),
+    B('Morning','Long walk with Dustin','Slow breakfast after','home','NEW'),
+    B('Midday','Free time','Rest, personal time, flexible plans','free'),
+    B('3:00–5:00 PM','Groceries + meal prep','Prep proteins and grains for the week','home','NEW'),
+    B('5:00–8:30 PM','Free time','Easy dinner','free'),
+    B('8:30–9:00 PM','Bedtime routine','','sleep'),
+    B('9:00 PM','Lights out','Monday 5:00 AM','sleep','NEW'),
+  ]},
+];
+
+const esc=s=>s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+const today=new Date().getDay();
+document.getElementById('week').innerHTML=DAYS.map(d=>`
+  <div class="day" id="d${d.k}">
+    <div class="dh${d.wk?' wk':''}${d.k===today?' today':''}"><h2>${d.name}</h2><p>${esc(d.sub)}${d.k===today?' · today':''}</p></div>
+    ${d.blocks.map(b=>`<div class="b${b.c==='free'?' free':''}" style="--c:${C[b.c]}">
+      <div class="t"><span>${esc(b.t)}</span>${b.tag?`<span class="tag">${b.tag}</span>`:''}</div>
+      <div class="n">${esc(b.n)}</div>${b.d?`<div class="d">${esc(b.d)}</div>`:''}</div>`).join('')}
+  </div>`).join('');
+
+// On narrow screens, scroll the board so today is the first column.
+const board=document.getElementById('board'), col=document.getElementById('d'+today);
+if(col && board.scrollWidth>board.clientWidth){ board.scrollLeft=col.offsetLeft-board.offsetLeft; }
+</script>
