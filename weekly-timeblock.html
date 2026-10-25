@@ -109,7 +109,8 @@
         <li><strong>Dustin gets walked as soon as you're home.</strong> He's been alone the longest by 6:00, and the walk also helps you shake off the commute.</li>
         <li><strong>The latest lights-out is 9:30, not 10:00, before a 5:00 alarm.</strong> See the sleep math below: 10:00 puts you under 7 hours.</li>
         <li><strong>Later nights are allowed when the next morning starts later.</strong> Wednesday, Friday and Sunday start later, so Tuesday, Thursday and Saturday nights get an extra hour of free time.</li>
-        <li><strong>Friday's blocks are filled in.</strong> They use the Grind Log's optional Friday cardio as a brisk walk with Dustin, plus the hour you'd normally spend commuting.</li>
+        <li><strong>Friday's blocks are filled in.</strong> They use the Grind Log's optional Friday cardio as a brisk walk with Dustin, plus the hour you'd normally spend commuting. Dars's optional dance class goes in the early evening.</li>
+        <li><strong>The morning is split between you two.</strong> One walks Dustin while the other showers, then you swap.</li>
       </ol>
     </section>
 
@@ -131,7 +132,7 @@
 
       <h2>More ideas</h2>
       <ul class="recs">
-        <li><strong>Split the morning between you two.</strong> One of you walks Dustin while the other showers, then swap. That can give back 15–20 minutes.</li>
+        <li><strong>Pick a light dance style for Friday.</strong> Dars's Saturday session is the heaviest glute day of the week. Social styles like salsa or bachata work well the night before. Avoid barre or jump-heavy cardio dance, which tire the same muscles. If a class runs late, it's fine as long as lights out stays near 9:00.</li>
         <li><strong>Treat the commute home as part of winding down.</strong> Listen to a podcast or music, and don't check work messages. The hour then counts as rest instead of more time spent on work.</li>
         <li><strong>The 7:15 reset is what keeps mornings calm.</strong> Gym bag by the door, clothes out, lunch in the fridge. A morning with nothing to decide is how you avoid feeling like you're chasing the next day.</li>
         <li><strong>Plan for Dustin's long days.</strong> On office days he's alone from about 7:30 to 6:00. A midday dog walker once or twice a week, or a longer Wednesday walk, helps.</li>
@@ -151,8 +152,8 @@ const gymMorning=[
   B('5:15–5:30 AM','Transit to gym','','commute','CHANGED'),
   B('5:30–6:30 AM','Gym session','Full 60 min: warm-up + Grind Log workout','move','CHANGED'),
   B('6:30–6:45 AM','Transit home','','commute'),
-  B('6:45–7:05 AM','Walk Dustin','','home','CHANGED'),
-  B('7:05–7:25 AM','Shower, dress, breakfast','Breakfast prepped the night before','move','NEW'),
+  B('6:45–7:05 AM','Split: Dustin + shower','One walks Dustin, the other showers','home','CHANGED'),
+  B('7:05–7:25 AM','Swap: shower + breakfast','Walker showers, the other plates breakfast','move','NEW'),
   B('7:25–7:30 AM','Leave buffer','Grab the packed lunch from the fridge','move'),
 ];
 const commuteWork=[
@@ -192,8 +193,9 @@ const DAYS=[
     B('7:30–8:00 AM','Free time','Coffee, or start a laundry load','free','CHANGED'),
     B('8:00 AM–5:00 PM','Work from home','Walk Dustin at lunch','work'),
     B('5:00–6:00 PM','Weekly reset','The hour you’d spend commuting: laundry, tidy, grocery list','home','CHANGED'),
-    B('6:00–7:15 PM','Dinner','The easy or fun one','home','CHANGED'),
-    B('7:15–8:30 PM','Free time','Nothing scheduled','free','CHANGED'),
+    B('6:00–7:00 PM','Dance class (Dars)','Optional active rest. Keep it light: Saturday is a glutes day.','move','NEW'),
+    B('7:15–8:00 PM','Dinner','The easy or fun one','home','CHANGED'),
+    B('8:00–8:30 PM','Free time','Nothing scheduled','free','CHANGED'),
     B('8:30–9:00 PM','Bedtime routine','Screens off, lights low','sleep'),
     B('9:00 PM','Lights out','Saturday is a 5:00 AM gym day','sleep'),
   ]},
