@@ -204,6 +204,29 @@
   .tbl th{font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-weight:400}
   .tbl td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--text)}
 
+  /* gear */
+  .eqchip{display:inline-flex;align-items:center;gap:6px;margin-top:7px;border:1px dashed var(--border);background:transparent;color:var(--text2);font-size:11.5px;font-weight:600;padding:5px 9px;border-radius:6px;cursor:pointer;text-align:left}
+  .eqchip:hover{border-color:var(--accent);color:var(--text)}
+  .eqchip svg{color:var(--accent);flex-shrink:0}
+  .eqgo{font-family:var(--mono);font-size:9.5px;color:var(--accent);letter-spacing:.5px;margin-left:2px}
+  .gear-area{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:18px 0 8px;font-weight:400}
+  .gear-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+  .gear{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:13px 14px;display:flex;flex-direction:column;gap:7px;min-width:0;scroll-margin-top:16px;transition:border-color .3s}
+  .gear.flash{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-dim)}
+  .gear-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .gear-name{font-weight:600;font-size:14.5px}
+  .whos{display:flex;gap:4px;flex-shrink:0}
+  .who{font-family:var(--mono);font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:999px;letter-spacing:.5px}
+  .who.don{background:color-mix(in srgb,var(--don) 22%,transparent);color:var(--text)}
+  .who.dars{background:color-mix(in srgb,var(--dars) 25%,transparent);color:var(--text)}
+  .gear-uses{list-style:none;display:flex;flex-direction:column;gap:3px}
+  .gear-uses li{font-size:12px;color:var(--text2);line-height:1.45}
+  .gear-uses li b{color:var(--text);font-weight:600}
+  .gear-uses li span{font-family:var(--mono);font-size:10px;color:var(--muted)}
+  .gear-p{font-size:12px;color:var(--text2);line-height:1.5}
+  .gear-p b{color:var(--text);font-weight:600}
+  .gear-link{align-self:flex-start;margin-top:2px;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--on-accent);background:var(--accent);padding:6px 11px;border-radius:999px;text-decoration:none}
+  .gear-link:hover{filter:brightness(1.08)}
   .foot{text-align:center;font-family:var(--mono);font-size:10px;color:var(--ghost);margin-top:26px;line-height:1.6}
   @media(max-width:640px){.logo{font-size:36px}.day-selector{grid-template-columns:repeat(4,1fr)}.day-title{font-size:28px}.day-meta{text-align:left}}
   @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -233,6 +256,7 @@
     <button id="tab-train" class="on" onclick="setView('train')">Train</button>
     <button id="tab-progress" onclick="setView('progress')">Progress</button>
     <button id="tab-plan" onclick="setView('plan')">Plan</button>
+    <button id="tab-gear" onclick="setView('gear')">Gear</button>
   </div>
 
   <div id="trainview">
@@ -241,6 +265,7 @@
   </div>
   <div id="progview" hidden></div>
   <div id="planview" hidden></div>
+  <div id="gearview" hidden></div>
 
   <div class="foot"><span id="syncnote">Loading your log…</span><br>Gym program v3 · 4 shared days · 60-min cap</div>
 </div>
@@ -259,32 +284,34 @@ const CARDIO = { don:"Bike or incline walk", dars:"StairMaster or incline walk" 
    Rule of thumb: heavy set ≈ 3 min, accessory set ≈ 2 min, superset round ≈ 3.5 min, +1 min per station. */
 const PROGRAMS = {
  don:{
-  Mon:{abbr:"MON",name:"Monday",label:"Upper A",tag:"UPPER · HEAVY",desc:"Heavy incline press, then two supersets",type:"workout",
+  Mon:{abbr:"MON",name:"Monday",label:"Upper A",tag:"UPPER · PULL-LEAN",desc:"Incline press, back work, delts, core",type:"workout",
    share:"No overlap with Dars today. She is on the hip thrust, split squats and abduction machine.",
    blocks:[
-    {kind:"straight",label:"Main lift",rest:"2–3 min",min:14,howto:"Two lighter warm-up sets, then 4 work sets. This is the heavier of your two incline days.",ex:[
-      {n:"Incline Dumbbell Press",m:"load",s:"4 × 6–10",mus:"Upper Chest, Front Delt, Triceps",k:"Compound",main:true,
+    {kind:"straight",label:"Main lift",rest:"2–3 min",min:12,howto:"Two lighter warm-up sets, then 3 heavy work sets. Leave about 2 good reps in the tank.",ex:[
+      {n:"Incline Dumbbell Press",m:"load",s:"3 × 6–10",mus:"Upper Chest, Front Delt, Triceps",k:"Compound",main:true,
         steps:["Bench at about 30°, dumbbells at upper-chest level.","Press up and slightly together without clashing the bells.","Lower under control to a stretch."],
-        tip:"Still your main chest lift, as in the old plan. Chest exposure #1 of 2, now with heavier dumbbells available.",
-        cue:"All 4 sets at 10 → next dumbbell up, restart at 6–7."}]},
-    {kind:"superset",label:"Superset A · 3 rounds",rest:"75–90s after the pair",min:12,howto:"Pulldown, then straight to lateral raises, then rest. Stay near the cable stack so the switch takes seconds.",ex:[
-      {n:"Lat Pulldown",m:"load",s:"3 × 8–12",mus:"Lats, Upper Back, Biceps",k:"Pull",
+        tip:"Your main press, heavier of the two incline days. Down to 3 sets so back work can catch up.",
+        cue:"All 3 sets at 10 → next dumbbell up, restart at 6–7."}]},
+    {kind:"superset",label:"Superset A · 3 rounds",rest:"75–90s after the pair",min:12,howto:"Pulldown, then straight to lateral raises, then rest.",ex:[
+      {n:"Lat Pulldown",m:"load",s:"3 × 8–12",mus:"Lats, Upper Back, Biceps",k:"Pull",main:true,
         steps:["Grip just outside shoulder width, thighs locked under the pad.","Pull your elbows down to your ribs, bar to the upper chest.","Let it rise under control to a full stretch."],
-        tip:"Lead with the elbows. A small lean back is fine; rocking is not."},
+        tip:"Lead with the elbows. A small lean back is fine; rocking is not.",
+        cue:"All sets at 12 → next pin down the stack."},
       {n:"DB Lateral Raise",m:"load",s:"3 × 12–20",mus:"Side Delts",k:"Isolation",main:true,
         steps:["Slight elbow bend, lean a touch forward.","Raise out to shoulder height, leading with the elbows.","Lower over 2–3 seconds."],
-        tip:"Priority muscle. Light weight and strict reps beat swinging a heavier pair.",
+        tip:"Side delts are still a priority. Light weight and strict reps beat swinging a heavier pair.",
         cue:"All sets at 20 → move up to the next dumbbell."}]},
-    {kind:"superset",label:"Superset B · 3 rounds",rest:"75s after the pair",min:12,howto:"Press and row work opposite muscles, so one recovers while the other works.",ex:[
-      {n:"Machine Chest Press",m:"load",s:"3 × 8–12",mus:"Chest, Triceps",k:"Push",
-        steps:["Set the seat so the handles line up with mid-chest.","Press out without letting your shoulders roll forward.","Return slowly until you feel a chest stretch."],
-        tip:"Second chest exercise of the day. The machine catches the weight, so you can push close to failure safely."},
+    {kind:"superset",label:"Superset B · 3 rounds",rest:"60–75s after the pair",min:12,howto:"Row, then core, then rest. Back gets more sets than chest today.",ex:[
       {n:"Seated Cable Row",m:"load",s:"3 × 8–12",mus:"Mid-Back, Lats",k:"Pull",
         steps:["Sit tall and let your shoulder blades reach forward at the stretch.","Row the handle to your lower ribs and squeeze.","Return under control."],
-        tip:"Keep your torso still. The shoulder blades do the moving."}]}
+        tip:"Keep your torso still. The shoulder blades do the moving."},
+      {n:"Hanging Knee Raise",m:"reps",s:"3 × 10–15",mus:"Abs, Hip Flexors",k:"Core",
+        steps:["Forearms on the captain's chair pads (or hang from a bar), back against the pad.","Curl your knees toward your chest and tilt your pelvis up at the top.","Lower slowly with no swinging."],
+        tip:"Abs work by curling the pelvis up. Lifting the knees alone mostly works the hip flexors.",
+        cue:"15 easy reps → straighten the legs more, or hold a light dumbbell between the feet."}]}
    ]},
-  Tue:{abbr:"TUE",name:"Tuesday",label:"Lower A",tag:"LOWER · STRENGTH",desc:"Leg extension, squat, Romanian deadlift",type:"workout",
-   share:"Dars finishes about 15 minutes earlier today. Her upper-body day is shorter on purpose, so she warms down with an easy walk while you finish.",
+  Tue:{abbr:"TUE",name:"Tuesday",label:"Lower A",tag:"LOWER · SQUAT",desc:"Leg extension, squat, RDL, then a core tri-set",type:"workout",
+   share:"Dars finishes about 17 minutes earlier today. Her upper-body day is shorter on purpose, so she walks easy on the incline treadmill while you finish.",
    blocks:[
     {kind:"straight",label:"Pre-exhaust",rest:"60s",min:5,howto:"Same order as your old Tuesday: leg extensions first so the squat works the quads harder at a given load.",ex:[
       {n:"Leg Extension",m:"load",s:"2 × 12–15",mus:"Quads",k:"Isolation",
@@ -300,40 +327,47 @@ const PROGRAMS = {
         steps:["Stand tall with the bar, soft knees.","Push your hips back; the bar slides down your thighs with a flat back.","Stop at a full hamstring stretch (about mid-shin), then drive your hips forward."],
         tip:"With a 190 lb deadlift behind you, dumbbells run out fast. Your grip gives out before your hamstrings do.",
         cue:"Start around 95–115 lb. Add 5–10 lb when all sets reach 10."}]},
-    {kind:"superset",label:"Superset · 3 rounds",rest:"60s after the pair",min:10,howto:"Curl, then calves, then rest.",ex:[
+    {kind:"superset",label:"Tri-set · 3 rounds",rest:"60s after all three",min:13,howto:"Leg curl, calf raise, Pallof press, then rest. The Pallof press is back on squat day, where your old plan had it.",ex:[
       {n:"Leg Curl",m:"load",s:"3 × 10–15",mus:"Hamstrings",k:"Isolation",
         steps:["Line your knees up with the machine's pivot, pad just above the heels.","Curl all the way and pause.","Lower slowly."],
         tip:"Trains the knee-bending job of the hamstrings, which the RDL doesn't."},
       {n:"Standing Calf Raise",m:"load",s:"3 × 10–15",mus:"Calves",k:"Isolation",
         steps:["Balls of the feet on the edge.","Drop into a deep stretch and pause 1 second.","Rise as high as you can."],
-        tip:"The pause at the bottom matters more than the weight."}]}
+        tip:"The pause at the bottom matters more than the weight."},
+      {n:"Cable Pallof Press",m:"load",s:"3 × 10/side",mus:"Core (anti-rotation)",k:"Core",
+        steps:["Cable at chest height, stand side-on, feet shoulder-width, handle at your sternum.","Press straight out and hold 2 seconds while the cable tries to twist you.","Bring it back in. Do all reps, then turn around for the other side."],
+        tip:"Trains your core to resist twisting, the same bracing your squat and deadlift rely on. The cable lets you add weight, which bands couldn't.",
+        cue:"10 clean reps per side with a 2-second hold → next pin."}]}
    ]},
   Wed:{abbr:"WED",name:"Wednesday",label:"Rest",tag:"RECOVERY",desc:"Optional mobility or walk",type:"rest",
     text:"Two gym days are done. Today is for recovery, so keep anything you do easy.",
     items:["Hip 90/90: 60s each side","World's greatest stretch: 5 per side","Thoracic rotation: 10 per side","Optional 20–30 min walk"]},
-  Thu:{abbr:"THU",name:"Thursday",label:"Upper B",tag:"UPPER · VOLUME",desc:"Incline press, pull-ups, chest and arms",type:"workout",
+  Thu:{abbr:"THU",name:"Thursday",label:"Upper B",tag:"UPPER · BALANCED",desc:"Press + pull-up pair, fly + row, delts, arms",type:"workout",
    share:"No overlap with Dars today. She is on the abduction machine, a barbell for RDLs, back extension and leg curl.",
    blocks:[
-    {kind:"straight",label:"Main lift",rest:"2 min",min:11,howto:"One or two warm-up sets, then 3 work sets.",ex:[
+    {kind:"superset",label:"Main pair · 3 rounds",rest:"2 min after the pair",min:14,howto:"Press, then pull-ups, then rest. Push and pull get equal work. Do a light warm-up set of each first.",ex:[
       {n:"Incline Dumbbell Press",m:"load",s:"3 × 8–12",mus:"Upper Chest, Front Delt, Triceps",k:"Compound",main:true,
         steps:["Bench at about 30°, dumbbells at upper-chest level.","Press up and slightly together without clashing the bells.","Lower under control to a stretch."],
         tip:"Chest exposure #2 of 2: lighter than Monday, more reps.",
-        cue:"All sets at 12 → next dumbbell up. Keep it close to Monday's load."}]},
-    {kind:"superset",label:"Superset A · 3 rounds",rest:"90s after the pair",min:12,howto:"Pull-ups, then lateral raises, then rest.",ex:[
+        cue:"All sets at 12 → next dumbbell up."},
       {n:"Pull-Up (assisted if needed)",m:"reps",s:"3 × 6–10",mus:"Lats, Biceps",k:"Pull",main:true,
         steps:["Grip slightly wider than your shoulders, start from a full hang.","Pull your chest toward the bar, elbows down and back.","Lower all the way."],
         tip:"Use the assisted machine if you get fewer than 6. Swap to lat pulldown if the station is busy.",
-        cue:"Keep your near-daily easy pull-up sets easy, especially Wednesday. 3 × 10 bodyweight → add weight."},
-      {n:"DB Lateral Raise",m:"load",s:"3 × 12–20",mus:"Side Delts",k:"Isolation",
-        steps:["Slight elbow bend, lean a touch forward.","Raise to shoulder height, leading with the elbows.","Lower over 2–3 seconds."],
-        tip:"Second side-delt session of the week. A cable lateral raise is a good swap."}]},
-    {kind:"superset",label:"Superset B · 2 rounds",rest:"75s after the pair",min:8,howto:"Fly, then face pull. The cable fly replaces your old banded flyes.",ex:[
+        cue:"Keep your near-daily easy pull-up sets easy, especially Wednesday. 3 × 10 bodyweight → add weight."}]},
+    {kind:"superset",label:"Superset B · 2 rounds",rest:"75s after the pair",min:8,howto:"Fly, then row.",ex:[
       {n:"Pec Deck",m:"load",s:"2 × 12–15",mus:"Chest",k:"Isolation",
         steps:["Set the seat so the handles sit at chest height.","Sweep your arms together with a slight elbow bend; squeeze 1 second.","Open slowly into a deep stretch."],
-        tip:"Chest work where your shoulders and triceps aren't the limit."},
+        tip:"Replaces your old banded flyes. Chest work where your shoulders and triceps aren't the limit."},
+      {n:"Chest-Supported Row",m:"load",s:"2 × 10–12",mus:"Mid-Back, Rear Delts",k:"Pull",
+        steps:["Chest on the pad, neutral grip.","Drive your elbows back past your torso.","Reach forward to a full stretch."],
+        tip:"The pad keeps your lower back out of it, which helps two days before deadlifts."}]},
+    {kind:"superset",label:"Shoulders · 3 rounds",rest:"60s after the pair",min:9,howto:"Lateral raise, then face pull. Do the third face-pull set only if you have time.",ex:[
+      {n:"DB Lateral Raise",m:"load",s:"3 × 12–20",mus:"Side Delts",k:"Isolation",
+        steps:["Slight elbow bend, lean a touch forward.","Raise to shoulder height, leading with the elbows.","Lower over 2–3 seconds."],
+        tip:"Second side-delt session of the week. A cable lateral raise is a good swap."},
       {n:"Cable Face Pull",m:"load",s:"2 × 12–15",mus:"Rear Delts, Rotator Cuff",k:"Pull",
         steps:["Rope at face height.","Pull toward your forehead with elbows high, hands finishing past your ears.","Squeeze, then control back."],
-        tip:"Kept from the old plan: shoulder-health work to balance all the pressing."}]},
+        tip:"Kept from the old plan: shoulder-health work to balance the pressing."}]},
     {kind:"superset",label:"Arms · 2 rounds",rest:"60s after the pair",min:7,howto:"Triceps, then biceps.",ex:[
       {n:"Triceps Pressdown",m:"load",s:"2 × 10–15",mus:"Triceps",k:"Isolation",
         steps:["Elbows pinned to your sides.","Push the rope down to full lockout and spread it at the bottom.","Let it rise until your forearms pass parallel."],
@@ -403,7 +437,7 @@ const PROGRAMS = {
         tip:"Stop each rep when your hip is straight. Going further just bends your lower back."}]}
    ]},
   Tue:{abbr:"TUE",name:"Tuesday",label:"Upper",tag:"UPPER · MAINTENANCE",desc:"Short by design, then an easy walk",type:"workout",
-   share:"Don's leg day runs about 15 minutes longer. Upper body is on maintenance, so instead of adding exercises, walk easy on the incline treadmill until he's done.",
+   share:"Don's leg day runs about 17 minutes longer. Upper body is on maintenance, so instead of adding exercises, walk easy on the incline treadmill until he's done.",
    blocks:[
     {kind:"superset",label:"Superset A · 2 rounds",rest:"90s after the pair",min:8,howto:"Pull, then push, then rest.",ex:[
       {n:"Lat Pulldown",m:"load",s:"2 × 8–12",mus:"Lats, Upper Back",k:"Pull",
@@ -589,7 +623,7 @@ async function initProfile(){
   if(p!==profile) return;
   DATA=d;
   renderStrip(); renderDays();
-  if(view==="train") selectDay(day); else if(view==="progress") renderProgress(); else renderPlan();
+  if(view==="train") selectDay(day); else if(view==="progress") renderProgress(); else if(view==="plan") renderPlan(); else renderGear();
 }
 function renderStrip(){
   const wk=weeksSince(DATA.blockStart)+1;
@@ -602,11 +636,12 @@ function resetBlock(){ DATA.blockStart=isoDate(); persist(); renderStrip(); }
 
 function setView(v){
   view=v;
-  ["train","progress","plan"].forEach(x=>document.getElementById("tab-"+x).classList.toggle("on",x===v));
+  ["train","progress","plan","gear"].forEach(x=>document.getElementById("tab-"+x).classList.toggle("on",x===v));
   document.getElementById("trainview").hidden=v!=="train";
   document.getElementById("progview").hidden=v!=="progress";
   document.getElementById("planview").hidden=v!=="plan";
-  if(v==="train") selectDay(day); else if(v==="progress") renderProgress(); else renderPlan();
+  document.getElementById("gearview").hidden=v!=="gear";
+  if(v==="train") selectDay(day); else if(v==="progress") renderProgress(); else if(v==="plan") renderPlan(); else renderGear();
 }
 
 function renderDays(){
@@ -706,6 +741,7 @@ function exCard(dk,gi,ex){
       <div class="ex-body">
         <div class="ex-name">${ex.n}${ex.main?'<span class="star" title="Key lift"></span>':""}</div>
         <div class="tags"><span class="tag tag-s">${ex.s}</span><span class="tag tag-m">${ex.mus}</span><span class="tag tag-k">${ex.k}</span></div>
+        ${gearOf(ex)?`<button class="eqchip" onclick="openGear('${gearKey(ex)}')" aria-label="Equipment: ${esc(gearOf(ex).n)}. Open gear guide"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M1 4.5h1.5v3H1zM9.5 4.5H11v3H9.5zM2.5 3h1.5v6H2.5zM8 3h1.5v6H8zM4 5.4h4v1.2H4z" fill="currentColor"/></svg>${esc(gearOf(ex).n)}<span class="eqgo">guide →</span></button>`:""}
         <div class="ghost"><span>${ghost}</span>${pr>0?`<span class="pr">PR ${pr}${ex.m==="load"?" lb":" reps"}</span>`:""}</div>
         <div class="sets">${rows}</div>
         <button class="form-toggle" onclick="toggleForm(${gi})" aria-expanded="false" id="ft-${gi}">▸ form &amp; cue</button>
@@ -836,8 +872,114 @@ function renderPlan(){
     <div class="note"><h4>${NAME[profile]}'s weekly sets</h4><div class="tbl"><table><thead><tr><th>Exercise</th><th>Sets / week</th></tr></thead><tbody>${vol}</tbody></table></div>
       <p style="margin-top:8px">${profile==="dars"
         ?"Hip thrust, abduction, kickbacks and glute-focused back extensions work the glutes directly. Split squats, step-ups, leg press and RDLs help but spread the work across other muscles too, so don't count every set the same. If soreness lingers, lifts go backwards, or you feel worn out at the next session, cut step-ups and then leg press first. Keep the abduction work."
-        :"Chest gets 12 sets across two incline days plus machine work; side delts get 8 sets across three days. Squat and deadlift are your strength lifts, and the Progress tab shows your estimated 1RM against bodyweight-based levels."}</p></div>
+        :"Balanced week: back about 11 sets (plus face pulls) against chest 8, so pulling slightly outweighs pressing. Side delts 8 sets over three days, core 9 sets over three days (knee raise, Pallof press, cable crunch). Squat and deadlift are your strength lifts; the Progress tab shows your estimated 1RM against bodyweight-based levels."}</p></div>
   </div>`;
+}
+
+
+/* ============================ GEAR ============================ */
+const yt=q=>"https://www.youtube.com/results?search_query="+encodeURIComponent(q);
+const GEAR={
+  adjBench:{n:"Adjustable bench + dumbbells",short:"Incline bench",area:"Free weights",
+    setup:"Set the back pad to the second or third notch (about 30°). Sit the seat one notch up so you don't slide.",
+    alt:"Smith machine with an incline bench, or an incline chest press machine.",q:"how to set up adjustable bench incline dumbbell press"},
+  dumbbells:{n:"Dumbbell rack",short:"Dumbbells",area:"Free weights",
+    setup:"Pick up and put down dumbbells by squatting, not bending over. Put them back in order on the rack.",
+    alt:"Cable column for lateral raises and curls.",q:"dumbbell gym etiquette beginner how to pick up dumbbells safely"},
+  latPulldown:{n:"Lat pulldown machine",short:"Lat pulldown",area:"Machines",
+    setup:"Adjust the knee pad so your thighs are locked in snugly. Stand up to grab the bar, then sit down with it.",
+    alt:"Assisted pull-up machine.",q:"how to use lat pulldown machine"},
+  seatedRow:{n:"Seated cable row",short:"Cable row",area:"Cables",
+    setup:"Feet on the foot plates with knees slightly bent. Use the close-grip V handle unless you want a wider grip.",
+    alt:"Chest-supported row machine, or a one-arm dumbbell row.",q:"how to use seated cable row machine"},
+  captainsChair:{n:"Captain's chair (knee raise station)",short:"Captain's chair",area:"Bodyweight",
+    setup:"Back flat against the pad, forearms on the arm pads, hands on the grips.",
+    alt:"Hang from a pull-up bar, or do a cable crunch.",q:"how to use captain's chair knee raise"},
+  legExt:{n:"Leg extension machine",short:"Leg extension",area:"Machines",
+    setup:"Line your knee up with the red pivot dot. Shin pad sits just above the ankle; back pad snug against you.",
+    alt:"Leg press with a narrow stance.",q:"how to use leg extension machine setup"},
+  squatRack:{n:"Squat rack + barbell",short:"Squat rack",area:"Free weights",
+    setup:"Bar hooks at mid-chest height. Safety arms just below the bottom of your squat. Always use collars on the plates.",
+    alt:"Smith machine squat, or hack squat machine.",q:"how to set up squat rack safety bars"},
+  barbell:{n:"Barbell + plates (platform)",short:"Barbell",area:"Free weights",
+    setup:"Use 45 lb (20 kg) bumper plates or blocks so the bar starts at mid-shin. Clip collars on both sides.",
+    alt:"Trap bar for deadlifts; dumbbells for RDLs.",q:"how to load a barbell deadlift setup beginner"},
+  legCurl:{n:"Leg curl machine (lying or seated)",short:"Leg curl",area:"Machines",
+    setup:"Line your knee up with the machine's pivot. The ankle pad sits just above the heel.",
+    alt:"Whichever leg curl is free, lying or seated. They work the same muscle.",q:"how to use leg curl machine lying and seated"},
+  calfStanding:{n:"Standing calf raise machine",short:"Calf machine",area:"Machines",
+    setup:"Shoulder pads set so your knees are almost straight at the bottom. Balls of the feet on the edge.",
+    alt:"Calf raises on the leg press or Smith machine.",q:"how to use standing calf raise machine"},
+  calfSeated:{n:"Seated calf raise machine",short:"Seated calf",area:"Machines",
+    setup:"Knee pad snug on the lower thighs. Release the safety lever after you rise up once.",
+    alt:"Leg press calf raise.",q:"how to use seated calf raise machine"},
+  cable:{n:"Cable column (adjustable pulley)",short:"Cable column",area:"Cables",
+    setup:"Slide the pulley to the height listed in the exercise and clip on the attachment (rope, D-handle or ankle cuff). Choose the weight with the pin.",
+    alt:"Any other cable station; resistance bands in a pinch.",q:"how to use cable machine gym beginner attachments"},
+  assistPullup:{n:"Assisted pull-up machine / pull-up bar",short:"Pull-up station",area:"Bodyweight",
+    setup:"On the assisted machine, more weight on the stack means more help. Kneel on the pad, then grip the handles.",
+    alt:"Lat pulldown.",q:"how to use assisted pull up machine"},
+  pecDeck:{n:"Pec deck (fly machine)",short:"Pec deck",area:"Machines",
+    setup:"Seat height so the handles line up with mid-chest. Set the arm start position so you feel a stretch, not shoulder pain.",
+    alt:"Cable fly at chest height.",q:"how to use pec deck machine setup"},
+  csRow:{n:"Chest-supported row machine",short:"Chest-supported row",area:"Machines",
+    setup:"Chest pad height so you can just reach the handles with arms straight.",
+    alt:"Seated cable row, or a chest-supported dumbbell row on an incline bench.",q:"how to use chest supported row machine"},
+  chestPress:{n:"Machine chest press",short:"Chest press",area:"Machines",
+    setup:"Seat height so the handles line up with mid-chest. Many machines have a foot lever to bring the handles forward.",
+    alt:"Dumbbell bench press.",q:"how to use chest press machine"},
+  legPress:{n:"Leg press (45° sled)",short:"Leg press",area:"Machines",
+    setup:"Load plates evenly on both sides. Twist the safety handles off only once your feet are set; twist them back on before getting out.",
+    alt:"Hack squat or Smith machine squat.",q:"how to use 45 degree leg press safely"},
+  backExt:{n:"45° back extension bench",short:"Back extension",area:"Bodyweight",
+    setup:"Pad top just below your hip crease so you can bend freely at the hips. Heels locked under the rollers.",
+    alt:"Cable pull-through.",q:"how to use 45 degree back extension glute focus"},
+  hipThrust:{n:"Hip thrust machine, or bench + barbell + pad",short:"Hip thrust",area:"Machines",
+    setup:"On a bench: the bench edge sits just under your shoulder blades, bar padded across the hip crease. On the machine: belt across the hips.",
+    alt:"Smith machine hip thrust, or a glute bridge machine.",q:"how to set up barbell hip thrust bench"},
+  abduction:{n:"Hip abduction machine",short:"Abduction",area:"Machines",
+    setup:"Pads on the outside of the knees. Set the start position so your legs begin close together.",
+    alt:"Standing cable abduction, or banded seated abduction.",q:"how to use hip abduction machine lean forward glutes"},
+  box:{n:"Plyo box / step",short:"Box",area:"Free weights",
+    setup:"Choose a height where your thigh is about parallel with your foot on top. Check it is stable.",
+    alt:"A flat bench.",q:"how to do dumbbell step up box height"},
+  mat:{n:"Floor mat / stretch area",short:"Mat",area:"Bodyweight",
+    setup:"Grab a mat from the stretch area.",alt:"Any clear floor space.",q:"how to do dead bug exercise"}
+};
+const EX_GEAR={
+  "Incline Dumbbell Press":"adjBench","Lat Pulldown":"latPulldown","DB Lateral Raise":"dumbbells","Seated Cable Row":"seatedRow",
+  "Hanging Knee Raise":"captainsChair","Leg Extension":"legExt","Barbell Back Squat":"squatRack","Barbell Romanian Deadlift":"barbell",
+  "Leg Curl":"legCurl","Seated Leg Curl":"legCurl","Lying Leg Curl":"legCurl","Standing Calf Raise":"calfStanding","Seated Calf Raise":"calfSeated",
+  "Cable Pallof Press":"cable","Cable Face Pull":"cable","Triceps Pressdown":"cable","Cable Crunch":"cable","Cable Kickback":"cable","Standing Cable Abduction":"cable",
+  "Pull-Up (assisted if needed)":"assistPullup","Pec Deck":"pecDeck","Chest-Supported Row":"csRow","DB Curl":"dumbbells",
+  "Conventional Deadlift":"barbell","Leg Press":"legPress","Leg Press (feet high & wide)":"legPress","Machine Chest Press":"chestPress",
+  "Hip Thrust":"hipThrust","Bulgarian Split Squat":"dumbbells","Hip Abduction Machine":"abduction","Dead Bug":"mat",
+  "45° Back Extension (glute focus)":"backExt","45° Back Extension":"backExt","DB Step-Up":"box"
+};
+function gearOf(ex){ return GEAR[ex.eq||EX_GEAR[ex.n]]; }
+function gearKey(ex){ return ex.eq||EX_GEAR[ex.n]; }
+function openGear(k){ setView("gear"); requestAnimationFrame(()=>{ const el=document.getElementById("gear-"+k); if(el){ el.scrollIntoView({behavior:"smooth",block:"start"}); el.classList.add("flash"); setTimeout(()=>el.classList.remove("flash"),1400); } }); }
+function renderGear(){
+  const use={}, order=[];
+  PROFILES.forEach(p=>DAY_KEYS.forEach(dk=>{ const d=PROGRAMS[p][dk]; if(d.type!=="workout") return;
+    d.blocks.forEach(b=>b.ex.forEach(ex=>{ const k=gearKey(ex); if(!k) return;
+      if(!use[k]){ use[k]={who:new Set(),items:{}}; order.push(k); }
+      use[k].who.add(p); const key=ex.n; (use[k].items[key]=use[k].items[key]||{p:new Set(),d:new Set()}); use[k].items[key].p.add(p); use[k].items[key].d.add(dk); })); }));
+  const areas=["Machines","Cables","Free weights","Bodyweight"];
+  let html=`<p class="prog-intro">Everything the plan uses, grouped by where it sits in the gym. Each exercise card on the Train tab links here. "How to use it" opens YouTube videos for that machine in a new tab.</p>`;
+  areas.forEach(a=>{
+    const ks=order.filter(k=>GEAR[k].area===a); if(!ks.length) return;
+    html+=`<h3 class="gear-area">${a}</h3><div class="gear-grid">`;
+    ks.forEach(k=>{ const g=GEAR[k], u=use[k];
+      const who=PROFILES.filter(p=>u.who.has(p)).map(p=>`<span class="who ${p}">${NAME[p]}</span>`).join("");
+      const items=Object.entries(u.items).map(([n,v])=>`<li><b>${esc(n)}</b> <span>${PROFILES.filter(p=>v.p.has(p)).map(p=>NAME[p]).join(" + ")} · ${DAY_KEYS.filter(d=>v.d.has(d)).join(", ")}</span></li>`).join("");
+      html+=`<div class="gear" id="gear-${k}"><div class="gear-head"><span class="gear-name">${g.n}</span><span class="whos">${who}</span></div>
+        <ul class="gear-uses">${items}</ul>
+        <p class="gear-p"><b>Setup:</b> ${g.setup}</p><p class="gear-p"><b>If it's taken:</b> ${g.alt}</p>
+        <a class="gear-link" href="${yt(g.q)}" target="_blank" rel="noopener">How to use it ↗</a></div>`; });
+    html+=`</div>`;
+  });
+  document.getElementById("gearview").innerHTML=html;
 }
 
 /* ============================ BOOT ============================ */
