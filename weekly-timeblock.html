@@ -76,7 +76,7 @@
   <header>
     <div>
       <h1>Your week, block by block</h1>
-      <p class="sub">Revised · lifting Mon Tue Thu Sat · Wed rest · Fri WFH · Sun off</p>
+      <p class="sub">Revised · lifting Mon Tue Thu Sat · Wed rest · Fri WFH · Sat + Sun weekend</p>
     </div>
     <div class="stats">
       <div class="stat"><b>8 h before alarm</b><span>Lights-out rule</span></div>
@@ -108,7 +108,8 @@
         <li><strong>Dinner is a real block and ends by 7:15.</strong> The old plan had cooking but no time to eat, so dinner ran into wind-down. Finishing nearly 2 hours before bed is better for sleep.</li>
         <li><strong>Dustin gets walked as soon as you're home.</strong> He's been alone the longest by 6:00, and the walk also helps you shake off the commute.</li>
         <li><strong>The latest lights-out is 9:30, not 10:00, before a 5:00 alarm.</strong> See the sleep math below: 10:00 puts you under 7 hours.</li>
-        <li><strong>Later nights are allowed when the next morning starts later.</strong> Wednesday, Friday and Sunday start later, so Tuesday, Thursday and Saturday nights get an extra hour of free time.</li>
+        <li><strong>Later nights are allowed when the next morning starts later.</strong> Wednesday, Friday, Saturday and Sunday start later. Tuesday and Thursday nights get an extra hour of free time, and Friday and Saturday nights run until 10:30.</li>
+        <li><strong>Saturday is a weekend day now.</strong> There's no work, so you sleep until 6:30, walk Dustin and eat first, then lift at 8:45. The rest of the day is free.</li>
         <li><strong>Friday's blocks are filled in.</strong> They use the Grind Log's optional Friday cardio as a brisk walk with Dustin, plus the hour you'd normally spend commuting. Dars's optional dance class goes in the early evening.</li>
         <li><strong>The morning is split between you two.</strong> One walks Dustin while the other showers, then you swap.</li>
       </ol>
@@ -120,11 +121,11 @@
         <table class="sleep">
           <thead><tr><th>Night</th><th>Lights out</th><th>Alarm</th><th>In bed</th><th>Likely asleep</th></tr></thead>
           <tbody>
-            <tr><td>Sun, Mon, Wed, Fri</td><td>9:00 PM</td><td>5:00 AM</td><td>8 h</td><td class="ok">~7.5 h</td></tr>
+            <tr><td>Sun, Mon, Wed</td><td>9:00 PM</td><td>5:00 AM</td><td>8 h</td><td class="ok">~7.5 h</td></tr>
             <tr><td>Same, latest</td><td>9:30 PM</td><td>5:00 AM</td><td>7.5 h</td><td class="ok">~7 h</td></tr>
             <tr><td>Old fallback</td><td>10:00 PM</td><td>5:00 AM</td><td>7 h</td><td class="low">~6.5 h ✗</td></tr>
             <tr><td>Tue, Thu</td><td>10:00 PM</td><td>6:00 AM</td><td>8 h</td><td class="ok">~7.5 h</td></tr>
-            <tr><td>Sat</td><td>10:30 PM</td><td>6:30 AM</td><td>8 h</td><td class="ok">~7.5 h</td></tr>
+            <tr><td>Fri, Sat</td><td>10:30 PM</td><td>6:30 AM</td><td>8 h</td><td class="ok">~7.5 h</td></tr>
           </tbody>
         </table>
       </div>
@@ -132,7 +133,7 @@
 
       <h2>More ideas</h2>
       <ul class="recs">
-        <li><strong>Pick a light dance style for Friday.</strong> Dars's Saturday session is the heaviest glute day of the week. Social styles like salsa or bachata work well the night before. Avoid barre or jump-heavy cardio dance, which tire the same muscles. If a class runs late, it's fine as long as lights out stays near 9:00.</li>
+        <li><strong>Pick a light dance style for Friday.</strong> Dars's Saturday session is the heaviest glute day of the week. Social styles like salsa or bachata work well the night before. Avoid barre or jump-heavy cardio dance, which tire the same muscles. With Saturday's gym moved to 8:45, there are about 14 hours between class and lifting, which helps.</li>
         <li><strong>Treat the commute home as part of winding down.</strong> Listen to a podcast or music, and don't check work messages. The hour then counts as rest instead of more time spent on work.</li>
         <li><strong>The 7:15 reset is what keeps mornings calm.</strong> Gym bag by the door, clothes out, lunch in the fridge. A morning with nothing to decide is how you avoid feeling like you're chasing the next day.</li>
         <li><strong>Plan for Dustin's long days.</strong> On office days he's alone from about 7:30 to 6:00. A midday dog walker once or twice a week, or a longer Wednesday walk, helps.</li>
@@ -193,16 +194,24 @@ const DAYS=[
     B('7:30–8:00 AM','Free time','Coffee, or start a laundry load','free','CHANGED'),
     B('8:00 AM–5:00 PM','Work from home','Walk Dustin at lunch','work'),
     B('5:00–6:00 PM','Weekly reset','The hour you’d spend commuting: laundry, tidy, grocery list','home','CHANGED'),
-    B('6:00–7:00 PM','Dance class (Dars)','Optional active rest. Keep it light: Saturday is a glutes day.','move','NEW'),
+    B('6:00–7:00 PM','Dance class (Dars)','Optional active rest. Keep it light: Saturday is leg/glute day.','move','NEW'),
     B('7:15–8:00 PM','Dinner','The easy or fun one','home','CHANGED'),
-    B('8:00–8:30 PM','Free time','Nothing scheduled','free','CHANGED'),
-    B('8:30–9:00 PM','Bedtime routine','Screens off, lights low','sleep'),
-    B('9:00 PM','Lights out','Saturday is a 5:00 AM gym day','sleep'),
+    B('8:00–10:00 PM','Free time','Weekend starts. Nothing scheduled.','free','CHANGED'),
+    B('10:00–10:30 PM','Bedtime routine','Screens off, lights low','sleep'),
+    B('10:30 PM','Lights out','Saturday wake 6:30 → 8 h in bed','sleep','CHANGED'),
   ]},
-  {k:6,name:'Saturday',sub:'Gym + work',blocks:[...gymMorning,...commuteWork,
-    B('6:00–6:30 PM','Walk Dustin','','home','CHANGED'),
-    B('6:30–7:15 PM','Cook + eat dinner','','home','CHANGED'),
-    B('7:15–10:00 PM','Free time','Your longest evening of the week','free','CHANGED'),
+  {k:6,name:'Saturday',sub:'Gym + weekend',wk:true,blocks:[
+    B('6:30–7:00 AM','Wake up','Coffee, small snack. No alarm rush.','move','CHANGED'),
+    B('7:00–7:45 AM','Long walk with Dustin','Together, before the day gets busy','home','CHANGED'),
+    B('7:45–8:30 AM','Light breakfast','Eat at least an hour before lifting','home','NEW'),
+    B('8:30–8:45 AM','Transit to gym','','commute','CHANGED'),
+    B('8:45–9:45 AM','Gym session','Full 60 min, heaviest leg/glute day','move','CHANGED'),
+    B('9:45–10:00 AM','Transit home','','commute','CHANGED'),
+    B('10:00–10:30 AM','Shower + post-gym meal','','move','NEW'),
+    B('10:30 AM–5:00 PM','Free time','Weekend: errands, plans or nothing at all','free','CHANGED'),
+    B('5:00–5:30 PM','Walk Dustin','','home','CHANGED'),
+    B('5:30–7:30 PM','Dinner','At home or out','home','CHANGED'),
+    B('7:30–10:00 PM','Free time','','free','CHANGED'),
     B('10:00–10:30 PM','Bedtime routine','','sleep'),
     B('10:30 PM','Lights out','Sunday wake 6:30 → 8 h in bed','sleep','CHANGED'),
   ]},
