@@ -339,7 +339,7 @@ const META = {
   don:{ brand:"GRIND LOG", sub:"Upper / Lower · Strength + Recomp",
         stats:[["WEIGHT","64.5 KG"],["PROTEIN","115 G/DAY"],["AVG","~2,000 KCAL"],["GYM","MON WED FRI SAT"],["PRIORITY","CHEST · SIDE DELTS"]] },
   dars:{ brand:"Forma Flow", sub:"Glute focus · Abduction priority",
-        stats:[["WEIGHT","50 KG"],["PROTEIN","100 G/DAY"],["AVG","~1,475 KCAL"],["GYM","MON WED FRI SAT"],["UPPER","MAINTENANCE"]] }
+        stats:[["WEIGHT","50 KG"],["PROTEIN","90 G/DAY"],["AVG","~1,475 KCAL"],["GYM","MON WED FRI SAT"],["UPPER","MAINTENANCE"]] }
 };
 const CARDIO = { don:"Incline treadmill or bike", dars:"StairMaster or incline treadmill" };
 const CARDIO_OPTS={
@@ -998,7 +998,7 @@ function renderPlan(){
       </tbody></table></div>
       <ul style="margin-top:10px">
       <li><b>Both</b> eat a little under their burn (Don ~7%, Dars ~9%) to lose fat slowly while still building muscle. Neither of you can choose where fat comes off; Dars's midsection shrinks as overall body fat drops.</li>
-      <li>Gym days get the extra food as carbs. Protein stays the same every day: Don 115 g (0.8 g per lb), Dars 100 g (a little above 0.8 g per lb, to protect muscle while she cuts).</li>
+      <li>Gym days get the extra food as carbs. Protein stays the same every day at 0.8 g per lb (about 1.75 g/kg): Don 115 g, Dars 90 g. Research finds little extra muscle gain above about 1.6 g/kg, so more mostly costs money.</li>
       <li><b>These are estimates.</b> Weigh in most mornings and compare weekly averages after 2–3 weeks.</li>
       <li><b>Don:</b> aim for a drop of about 0.1–0.25 kg a week. Losing faster, or lifts stalling? Add 150 kcal a day. Not moving after 3 weeks? Take off 100–150.</li>
       <li><b>Dars:</b> measure her waist at the navel every 2 weeks; it matters more than the scale. Aim for about 0.1–0.2 kg a week down. If hip thrust and abduction weights stall for 2+ weeks, or she's dropping faster, add 100–150 kcal a day. Once her midsection is where she wants it, move up to maintenance (~1,625 average) for glute growth.</li></ul></div>
@@ -1024,7 +1024,7 @@ const FUEL={
   don:{goal:"Slow fat loss",bmr:1520,burn:{train:2240,rest:2020},
        train:{kcal:2100,p:115,c:275,f:60},rest:{kcal:1875,p:115,c:220,f:60}},
   dars:{goal:"Small deficit: slow fat loss while glutes grow",bmr:1155,burn:{train:1690,rest:1540},
-       train:{kcal:1550,p:100,c:185,f:45},rest:{kcal:1375,p:100,c:140,f:45}}
+       train:{kcal:1550,p:90,c:195,f:45},rest:{kcal:1375,p:90,c:150,f:45}}
 };
 const fmtK=n=>n.toLocaleString("en-US");
 function dayType(p,dk){ return PROGRAMS[p][dk].type==="workout"?"train":"rest"; }
