@@ -206,6 +206,19 @@
   .tbl th{font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-weight:400}
   .tbl td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--text)}
 
+  /* fuel */
+  .fuel{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:14px;display:flex;flex-direction:column;gap:8px}
+  .fuel-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .fuel-k{font-family:var(--display);font-size:32px;line-height:1;color:var(--accent);letter-spacing:var(--display-ls);font-variant-numeric:tabular-nums}
+  .fuel-u{font-family:var(--mono);font-size:10px;color:var(--muted);margin-left:8px;letter-spacing:.5px;text-transform:uppercase}
+  .fuel-tag{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1px solid var(--border);color:var(--text2)}
+  .fuel-tag.train{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+  .macros{display:flex;gap:6px;flex-wrap:wrap}
+  .macros span{font-size:12px;color:var(--text2);background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 9px}
+  .macros b{color:var(--text);font-family:var(--mono);font-weight:700}
+  .fuel-note{font-size:11.5px;color:var(--muted);line-height:1.5}
+  .fuel-note b{color:var(--text2)}
+  .restcard{margin-top:0}
   /* cardio */
   .block.cardio{border-color:var(--cardio);background:color-mix(in srgb,var(--cardio) 7%,transparent)}
   .block.cardio .pill{background:color-mix(in srgb,var(--cardio) 16%,transparent);color:var(--cardio);border-color:color-mix(in srgb,var(--cardio) 35%,transparent)}
@@ -324,9 +337,9 @@
 /* ============================ DATA ============================ */
 const META = {
   don:{ brand:"GRIND LOG", sub:"Upper / Lower · Strength + Recomp",
-        stats:[["WEIGHT","65 KG"],["PROTEIN","110 G/DAY"],["GYM","MON WED FRI SAT"],["PRIORITY","CHEST · SIDE DELTS"]] },
+        stats:[["WEIGHT","64.5 KG"],["PROTEIN","115 G/DAY"],["AVG","~2,000 KCAL"],["GYM","MON WED FRI SAT"],["PRIORITY","CHEST · SIDE DELTS"]] },
   dars:{ brand:"Forma Flow", sub:"Glute focus · Abduction priority",
-        stats:[["FOCUS","UPPER GLUTE"],["PROTEIN","90–100 G/DAY"],["GYM","MON WED FRI SAT"],["UPPER","MAINTENANCE"]] }
+        stats:[["WEIGHT","50 KG"],["PROTEIN","90 G/DAY"],["AVG","~1,625 KCAL"],["GYM","MON WED FRI SAT"],["UPPER","MAINTENANCE"]] }
 };
 const CARDIO = { don:"Incline treadmill or bike", dars:"StairMaster or incline treadmill" };
 const CARDIO_OPTS={
@@ -755,10 +768,10 @@ function buildPanel(dk){
   let head=`<div class="day-header"><div class="day-title"><span class="num">${d.abbr}</span> · ${d.label}</div>
     <div class="day-meta"><div class="day-tag">${d.tag}</div><div class="day-desc">${d.desc}</div></div></div>`;
   if(d.type!=="workout"){
-    p.innerHTML=head+`<div class="restcard"><h3>${d.label}</h3><p>${d.text}</p><ul class="restlist">${d.items.map(i=>`<li>${i}</li>`).join("")}</ul></div>`;
+    p.innerHTML=head+fuelHTML(dk)+`<div class="restcard"><h3>${d.label}</h3><p>${d.text}</p><ul class="restlist">${d.items.map(i=>`<li>${i}</li>`).join("")}</ul></div>`;
     return p;
   }
-  head+=clockHTML(dk)+`<div class="pbar"><div class="pfill" id="pfill"></div></div>`;
+  head+=fuelHTML(dk)+clockHTML(dk)+`<div class="pbar"><div class="pfill" id="pfill"></div></div>`;
   let body="", gi=0;
   d.blocks.forEach(bl=>{
     const cls=bl.kind==="finisher"?"finisher":(bl.kind==="straight"?"straight":"");
@@ -931,7 +944,7 @@ function startTimer(s){ tSecs=s; tRun=true; clearInterval(tInt);
 function toggleTimer(){ if(tSecs>0) tRun=!tRun; paint(); }
 
 /* progress: Epley estimate + bodyweight-based strength levels (all weights in kg) */
-const BW_KG={don:65,dars:49};
+const BW_KG={don:64.5,dars:50};
 const TIERS={"Barbell Back Squat":[["novice",1.25],["intermediate",1.5],["advanced",2.0]],
              "Conventional Deadlift":[["novice",1.5],["intermediate",2.0],["advanced",2.5]]};
 function e1rm(sets){ return Math.max(0,...(sets||[]).map(s=>(+s.w||0)*(1+(+s.r||0)/30))); }
@@ -980,6 +993,15 @@ function renderPlan(){
       <li><b>After:</b> optional cold shower. Shower warm, then finish with 30–90 seconds cold. Keep it short; skip ice baths on lifting days.</li></ul></div>
     <div class="note"><h4>Finish times</h4><div class="tbl"><table class="wide"><thead><tr><th>Day</th><th>Don</th><th>Lifting ends</th><th>Dars</th><th>Lifting ends</th><th>Gap</th></tr></thead><tbody>${rows}</tbody></table></div>
       <p style="margin-top:8px">Friday's gap is on purpose. Dars's upper-body day is maintenance, and extra exercises would only fill time. She uses the gap for an easy incline walk.</p></div>
+    <div class="note"><h4>Calories</h4><div class="tbl"><table class="wide"><thead><tr><th></th><th>Burn est.</th><th>Gym days</th><th>Rest days</th><th>Week avg</th></tr></thead><tbody>
+      ${PROFILES.map(p=>{const F=FUEL[p],w=weekAvg(p);return `<tr><td>${NAME[p]}</td><td class="n">~${fmtK(w.burn)}</td><td class="n">${fmtK(F.train.kcal)}</td><td class="n">${fmtK(F.rest.kcal)}</td><td class="n">${fmtK(w.eat)}</td></tr>`;}).join("")}
+      </tbody></table></div>
+      <ul style="margin-top:10px">
+      <li><b>Don</b> eats about 7% under his burn for slow fat loss while lifts go up. <b>Dars</b> eats at maintenance: a deficit would slow glute growth.</li>
+      <li>Gym days get the extra food as carbs. Protein stays the same every day: Don 115 g, Dars 90 g (0.8 g per lb).</li>
+      <li><b>These are estimates.</b> Weigh in most mornings and compare weekly averages after 2–3 weeks.</li>
+      <li><b>Don:</b> aim for a drop of about 0.1–0.25 kg a week. Losing faster, or lifts stalling? Add 150 kcal a day. Not moving after 3 weeks? Take off 100–150.</li>
+      <li><b>Dars:</b> aim for steady weight, or up to 0.1 kg a week. If it's dropping, add 100–150 kcal a day.</li></ul></div>
     <div class="note"><h4>How to progress</h4><ul>
       <li>Most sets end with about <b>2 good reps left</b>.</li>
       <li>When every set reaches the top of the rep range with clean form, <b>add a little weight</b> next time.</li>
@@ -993,6 +1015,34 @@ function renderPlan(){
   </div>`;
 }
 
+
+
+/* ============================ FUEL (calorie targets) ============================ */
+/* Mifflin-St Jeor BMR × 1.2 (desk job) + 8k steps; gym days add one session's burn.
+   Don 64.5 kg/163 cm/30 · Dars 50 kg/155 cm/31. Gym-day extra comes from carbs; protein and fat stay put. */
+const FUEL={
+  don:{goal:"Slow fat loss",bmr:1520,burn:{train:2240,rest:2020},
+       train:{kcal:2100,p:115,c:275,f:60},rest:{kcal:1875,p:115,c:220,f:60}},
+  dars:{goal:"Maintenance for glute growth",bmr:1155,burn:{train:1690,rest:1540},
+       train:{kcal:1700,p:90,c:225,f:50},rest:{kcal:1525,p:90,c:180,f:50}}
+};
+const fmtK=n=>n.toLocaleString("en-US");
+function dayType(p,dk){ return PROGRAMS[p][dk].type==="workout"?"train":"rest"; }
+function fuelToday(p,dk){ return FUEL[p][dayType(p,dk)]; }
+function weekAvg(p){ let t=0,b=0; DAY_KEYS.forEach(dk=>{ const k=dayType(p,dk); t+=FUEL[p][k].kcal; b+=FUEL[p].burn[k]; }); return {eat:Math.round(t/7),burn:Math.round(b/7),week:t}; }
+function fuelHTML(dk){
+  const F=FUEL[profile], k=dayType(profile,dk), t=F[k], burn=F.burn[k], w=weekAvg(profile);
+  const diff=t.kcal-burn;
+  const why=profile==="don"
+    ? (k==="train"?"Gym day: more carbs to fuel the session and recovery.":"Rest day: same protein, fewer carbs.")
+    : (k==="train"?"Gym day: more carbs to fuel the session and glute recovery.":"Rest day: same protein, fewer carbs. Still at maintenance.");
+  return `<div class="fuel">
+    <div class="fuel-top"><div><span class="fuel-k">${fmtK(t.kcal)}</span><span class="fuel-u">kcal today</span></div>
+      <span class="fuel-tag ${k}">${k==="train"?"Gym day":"Rest day"}</span></div>
+    <div class="macros"><span><b>${t.p} g</b> protein</span><span><b>${t.c} g</b> carbs</span><span><b>${t.f} g</b> fat</span></div>
+    <p class="fuel-note">${why} You burn about ${fmtK(burn)} today, so this is ${diff<0?fmtK(-diff)+" under":diff>0?fmtK(diff)+" over":"even"}. Week average: <b>${fmtK(w.eat)}/day</b> against ~${fmtK(w.burn)} burned (${F.goal.toLowerCase()}).</p>
+  </div>`;
+}
 
 /* ============================ GEAR ============================ */
 const yt=q=>"https://www.youtube.com/results?search_query="+encodeURIComponent(q);
@@ -1229,7 +1279,7 @@ function renderWeek(){
   document.getElementById("weekview").innerHTML=`
     <div class="wk-tabs">${tabs}</div>
     <div class="wk-head"><div><div class="day-title">${wday==="Sun"?"Sunday":PROGRAMS[profile][wday].name}</div><div class="day-desc">${w.sub}</div></div>
-      <div class="wk-facts"><span>Wake <b>${w.wake}</b></span><span>Gym <b>${GYM_SLOT[wday]||"—"}</b></span><span>Lights out <b>${w.lights}</b></span><span>Next alarm <b>${w.next}</b></span></div></div>
+      <div class="wk-facts"><span>Wake <b>${w.wake}</b></span><span>Gym <b>${GYM_SLOT[wday]||"—"}</b></span><span>Lights out <b>${w.lights}</b></span><span>Next alarm <b>${w.next}</b></span><span>Eat <b>${fmtK(fuelToday(profile,wday).kcal)} kcal</b></span><span>Protein <b>${fuelToday(profile,wday).p} g</b></span></div></div>
     ${live}
     <ol class="wk-list">${rows}</ol>
     <div class="wk-legend">${legend}</div>
