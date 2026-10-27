@@ -407,7 +407,7 @@ const PROGRAMS = {
    ]},
   Thu:{abbr:"THU",name:"Thursday",label:"Zone 2",tag:"OPTIONAL CARDIO",desc:"Brisk 6:15 AM walk with Dustin",type:"rest",
     text:"Your optional Zone 2 is the 6:15 AM walk with Dustin, kept brisk (see the Week tab). Easy enough that it doesn't take away from Friday and Saturday.",
-    items:["30–35 min brisk walk at a pace where you can still talk","Heart rate about 120–140 bpm","Missed Monday or Wednesday? Make it up Sunday morning, or let it go"]},
+    items:["30–35 min brisk walk at a pace where you can still talk","Heart rate about 120–140 bpm","Missed Monday or Wednesday? Skip it and carry on with the next session"]},
   Fri:{abbr:"FRI",name:"Friday",label:"Upper B",tag:"UPPER · BALANCED",desc:"Press + pull-up pair, fly + row, delts, arms",type:"workout",
    share:"Dars finishes about 13 minutes earlier today. Her upper-body day is short on purpose, so she walks easy on the incline treadmill. You both use cable stations near the end; take any free one.",
    blocks:[
@@ -500,7 +500,7 @@ const PROGRAMS = {
         tip:"Stop each rep when your hip is straight. Going further just bends your lower back."}]}
    ]},
   Tue:{abbr:"TUE",name:"Tuesday",label:"Rest",tag:"RECOVERY",desc:"6:00 wake · long walk + mobility",type:"rest",
-    text:"Rest before Wednesday's abduction-first day. Keep anything you do gentle.",
+    text:"Rest before Wednesday's 5:30 AM abduction-first day. Keep anything you do gentle. Dance class fits better on Thursday than tonight.",
     items:["Pigeon pose: 60s each side","Butterfly stretch: 60s","Seated forward fold: 60s","Lights out by 9:00 PM tonight (5:00 AM alarm Wednesday)"]},
   Wed:{abbr:"WED",name:"Wednesday",label:"Glutes B",tag:"GLUTES · ABDUCTION FIRST",desc:"Abduction, RDL, back extension, leg curl",type:"workout",
    share:"You both use a barbell and a leg curl today. Use separate bars for RDLs; do your leg curl right after RDLs (about 0:25–0:32), before Don's tri-set starts at about 0:34.",
@@ -525,10 +525,10 @@ const PROGRAMS = {
         tip:"Rounding the upper back and turning the toes out keeps the work on the glutes."}]}
    ]},
   Thu:{abbr:"THU",name:"Thursday",label:"Rest",tag:"RECOVERY",desc:"6:00 wake · easy walk",type:"rest",
-    text:"Rest between Wednesday's glute day and Friday's upper day. An easy walk with Dustin is all you need.",
-    items:["Easy morning walk with Dustin","Optional stretching: pigeon, butterfly, low lunge","Missed Monday or Wednesday? Make it up Sunday morning, or let it go"]},
+    text:"Rest between Wednesday's glute day and Friday's upper day. Best evening for your optional dance class.",
+    items:["Optional dance class tonight: light social styles (salsa, bachata, swing, line dancing); skip barre and jump-heavy cardio dance","Easy morning walk with Dustin","Optional stretching: pigeon, butterfly, low lunge","Missed Monday or Wednesday? Skip it and carry on with the next session"]},
   Fri:{abbr:"FRI",name:"Friday",label:"Upper",tag:"UPPER · MAINTENANCE",desc:"Short by design, then an easy walk",type:"workout",
-   share:"Don's upper day runs about 13 minutes longer. Upper body is on maintenance, so walk easy on the incline treadmill until he's done. Tonight's dance class is optional; keep it light before Saturday.",
+   share:"Don's upper day runs about 13 minutes longer. Upper body is on maintenance, so walk easy on the incline treadmill until he's done.",
    blocks:[
     {kind:"superset",label:"Superset A · 2 rounds",rest:"90s after the pair",min:8,howto:"Pull, then push, then rest.",ex:[
       {n:"Lat Pulldown",m:"load",s:"2 × 8–12",mus:"Lats, Upper Back",k:"Pull",
@@ -1159,10 +1159,10 @@ const WEEK={
     B("6:15","6:30","Transit to gym","","commute"),
     B("6:30","7:30","Gym session","","move",{gym:true}),
     B("7:30","7:45","Transit home","","commute"),
-    B("7:45","8:00","Shower + breakfast","One showers while the other plates breakfast. You're home, so the second shower fits in your first break.","move"),
+    B("7:45","8:00","Breakfast","No shower needed: you're working from home","move"),
     B("8:00","17:00","Work from home","Long walk with Dustin at lunch","work"),
     B("17:00","18:00","Weekly reset","The hour you'd spend commuting: laundry, tidying, grocery list","home"),
-    B("18:00","19:00","Dance class","","move",{byProfile:{dars:{t:"Dance class (optional)",d:"Light social styles only: salsa, bachata, swing, line dancing. You already trained this morning, and Saturday is your biggest glute day."},don:{t:"Free time",d:"Dars has her optional dance class. Join her if you like.",c:"free"}}}),
+    B("18:00","19:15","Free time","","free"),
     B("19:15","20:00","Dinner","The easy or fun one","home"),
     B("20:00","22:00","Free time","Weekend starts. Nothing scheduled.","free"),
     B("22:00","22:30","Bedtime routine","Screens off, lights low","sleep"),
@@ -1236,7 +1236,7 @@ function renderWeek(){
     <div class="note wk-notes"><h4>House rules</h4><ul>
       <li><b>Lights out is 8 hours before the next alarm.</b> Before a 5:00 AM alarm that means 9:00 PM, and 9:30 at the latest.</li>
       <li><b>Only two 5:00 AM alarms a week</b> (Monday and Wednesday), and only two early bedtimes (Sunday and Tuesday).</li>
-      <li><b>A 5:00 AM feels rough?</b> Skip the gym, not the sleep. Make the session up Sunday morning, or let it go that week.</li>
+      <li><b>A 5:00 AM feels rough?</b> Skip the gym, not the sleep, and carry on with the next scheduled session. Don't make it up on Sunday: that's your only full rest day after Saturday's heavy legs, and a missed session now and then doesn't set you back.</li>
       <li><b>Saturday feels like too much?</b> Dars cuts step-ups first, then leg press. Keep the abduction.</li>
       <li><b>Weekend wake-up by 7:00 AM</b> at the latest, so Monday's alarm stays close to your weekend rhythm.</li>
       <li><b>Dinner ends about 2 hours before lights out.</b> Cook double and pack tomorrow's lunch; no cooking in the morning.</li>
