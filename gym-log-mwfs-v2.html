@@ -219,6 +219,11 @@
   .fuel-note{font-size:11.5px;color:var(--muted);line-height:1.5}
   .fuel-note b{color:var(--text2)}
   .restcard{margin-top:0}
+  /* optional extras */
+  .block.bonus{border:1px dashed var(--accent);background:color-mix(in srgb,var(--accent) 4%,transparent)}
+  .block.bonus .pill{background:transparent;color:var(--accent);border:1px dashed var(--accent)}
+  .seg.opt{background:repeating-linear-gradient(45deg,var(--warm) 0 4px,transparent 4px 8px);color:var(--text)}
+  .optn{font-size:10px;color:var(--muted)}
   /* cardio */
   .block.cardio{border-color:var(--cardio);background:color-mix(in srgb,var(--cardio) 7%,transparent)}
   .block.cardio .pill{background:color-mix(in srgb,var(--cardio) 16%,transparent);color:var(--cardio);border-color:color-mix(in srgb,var(--cardio) 35%,transparent)}
@@ -384,7 +389,14 @@ const PROGRAMS = {
       {n:"Hanging Knee Raise",m:"reps",s:"3 × 10–15",mus:"Abs, Hip Flexors",k:"Core",
         steps:["Forearms on the captain's chair pads (or hang from a bar), back against the pad.","Curl your knees toward your chest and tilt your pelvis up at the top.","Lower slowly with no swinging."],
         tip:"Abs work by curling the pelvis up. Lifting the knees alone mostly works the hip flexors.",
-        cue:"15 easy reps → straighten the legs more, or hold a light dumbbell between the feet."}]}
+        cue:"15 easy reps → straighten the legs more, or hold a light dumbbell between the feet."}]},
+    {kind:"bonus",optional:true,label:"Optional · chest + triceps",rest:"60s after the pair",min:7,howto:"If you have time. These come out of cardio first. Everything still ends by about 0:55, and running up to 15 min over is fine. Chest gets a stretch-focused second exercise, and the triceps get overhead work for the biggest part of the upper arm.",ex:[
+      {n:"Cable Fly",m:"load",s:"2 × 12–15",mus:"Chest",k:"Isolation",
+        steps:["Pulleys at shoulder height. Step forward with a slight elbow bend.","Sweep the handles together in front of your chest and squeeze 1 second.","Open slowly into a deep stretch."],
+        tip:"Takes chest from 8 to 10 sets a week, back toward your old priority."},
+      {n:"Overhead Cable Triceps Extension",m:"load",s:"2 × 10–15",mus:"Triceps (long head)",k:"Isolation",
+        steps:["Rope on a low or middle pulley. Face away with the rope behind your head.","Extend your arms overhead to lockout, elbows pointing forward.","Lower slowly into a deep stretch behind your head."],
+        tip:"The overhead position trains the long head of the triceps, which pressdowns hit less. It makes up most of the back of the upper arm."}]}
    ]},
   Tue:{abbr:"TUE",name:"Tuesday",label:"Rest",tag:"RECOVERY",desc:"6:00 wake · long walk + mobility",type:"rest",
     text:"Recovery after Monday's upper day, and no 5 AM alarm. The 6:15 walk with Dustin has room for 10 minutes of mobility.",
@@ -416,7 +428,14 @@ const PROGRAMS = {
       {n:"Cable Pallof Press",m:"load",s:"3 × 10/side",mus:"Core (anti-rotation)",k:"Core",
         steps:["Cable at chest height, stand side-on, feet shoulder-width, handle at your sternum.","Press straight out and hold 2 seconds while the cable tries to twist you.","Bring it back in. Do all reps, then turn around for the other side."],
         tip:"Trains your core to resist twisting, the same bracing your squat and deadlift rely on. The cable lets you add weight, which bands couldn't.",
-        cue:"10 clean reps per side with a 2-second hold → next pin."}]}
+        cue:"10 clean reps per side with a 2-second hold → next pin."}]},
+    {kind:"bonus",optional:true,label:"Optional · delts + biceps",rest:"45–60s after the pair",min:8,howto:"If you have time. These come out of cardio first. Everything still ends by about 0:55, and running up to 15 min over is fine. Light upper-body work after leg day. Low fatigue, so it won't affect Friday.",ex:[
+      {n:"Cable Lateral Raise",m:"load",s:"2 × 12–15/side",mus:"Side Delts",k:"Isolation",
+        steps:["Low pulley, stand side-on, handle in the far hand.","Raise out to shoulder height, leading with the elbow.","Lower slowly. Do all reps, then switch sides."],
+        tip:"The cable keeps tension at the bottom, where dumbbells go slack. Takes side delts to 10 sets a week."},
+      {n:"Incline DB Curl",m:"load",s:"2 × 10–15",mus:"Biceps",k:"Isolation",
+        steps:["Bench at 45–60°, arms hanging straight down.","Curl without letting your elbows drift forward.","Lower all the way to a full stretch."],
+        tip:"Lying back puts the biceps on a stretch, which adds growth stimulus compared with standing curls."}]}
    ]},
   Thu:{abbr:"THU",name:"Thursday",label:"Zone 2",tag:"OPTIONAL CARDIO",desc:"Brisk 6:15 AM walk with Dustin",type:"rest",
     text:"Your optional Zone 2 is the 6:15 AM walk with Dustin, kept brisk (see the Week tab). Easy enough that it doesn't take away from Friday and Saturday.",
@@ -453,7 +472,15 @@ const PROGRAMS = {
         tip:"Only the forearms move."},
       {n:"DB Curl",m:"load",s:"2 × 10–15",mus:"Biceps",k:"Isolation",
         steps:["Palms forward, elbows by your sides.","Curl up without swinging and squeeze.","Lower over 2 seconds."],
-        tip:"Strict reps. If you have to swing, the weight is too heavy."}]}
+        tip:"Strict reps. If you have to swing, the weight is too heavy."}]},
+    {kind:"bonus",optional:true,label:"Optional · rear delts + triceps",rest:"60–75s after the pair",min:7,howto:"If you have time. These come out of cardio first. Everything still ends by about 0:55, and running up to 15 min over is fine. Rounds out the shoulders from the side and back, and gives the triceps a heavy compound movement.",ex:[
+      {n:"Reverse Pec Deck",m:"load",s:"2 × 15–20",mus:"Rear Delts",k:"Isolation",
+        steps:["Face the pad, handles at shoulder height.","Sweep your arms back and out in an arc; squeeze 1 second.","Return slowly."],
+        tip:"Rear delts make the shoulder look full from the side. Rows only partly cover them."},
+      {n:"Assisted Dip",m:"load",s:"2 × 8–12",mus:"Triceps, Lower Chest",k:"Push",
+        steps:["Kneel on the assist pad, hands on the dip handles, arms straight.","Lower until your upper arms are about parallel to the floor, torso fairly upright.","Press back up to lockout."],
+        tip:"Triceps are about two-thirds of upper-arm size, and they were your lowest arm number. Log the assist weight; less assist means you're stronger.",
+        cue:"Stop if the front of your shoulder hurts; do close-grip pressdowns instead."}]}
    ]},
   Sat:{abbr:"SAT",name:"Saturday",label:"Lower B",tag:"LOWER · DEADLIFT",desc:"Deadlift, curls, leg press, calves and delts",type:"workout",
    share:"You both use the leg press today. Dars has it from about 0:16 to 0:25 while you deadlift and do curls; it's yours from about 0:28.",
@@ -481,7 +508,14 @@ const PROGRAMS = {
         tip:"The seated version reaches the deeper calf muscle that standing raises miss."},
       {n:"DB Lateral Raise",m:"load",s:"2 × 15–20",mus:"Side Delts",k:"Isolation",
         steps:["Slight elbow bend.","Raise to shoulder height.","Lower slowly."],
-        tip:"Third side-delt session of the week."}]}
+        tip:"Third side-delt session of the week."}]},
+    {kind:"bonus",optional:true,label:"Optional · quads + calves",rest:"60s after the pair",min:7,howto:"If you have time. These come out of cardio first. Everything still ends by about 0:55, and running up to 15 min over is fine. Extra leg work after the deadlift. Takes quads to 10 sets and calves to 8 a week.",ex:[
+      {n:"Leg Extension",m:"load",s:"2 × 12–15",mus:"Quads",k:"Isolation",
+        steps:["Toes forward, back against the pad.","Raise under control and squeeze hard at the top.","Lower slowly."],
+        tip:"Pure quad work with almost no back or recovery cost."},
+      {n:"Standing Calf Raise",m:"load",s:"2 × 10–15",mus:"Calves",k:"Isolation",
+        steps:["Balls of the feet on the edge.","Drop into a deep stretch and pause 1 second.","Rise as high as you can."],
+        tip:"Pairs with the seated calf raise for both calf muscles."}]}
    ]},
   Sun:{abbr:"SUN",name:"Sunday",label:"Rest",tag:"RECOVERY",desc:"Easy movement",type:"rest",
     text:"Easy movement only. Loosen up and get ready for Monday.",
@@ -510,7 +544,14 @@ const PROGRAMS = {
     {kind:"straight",label:"Finisher",rest:"30s between sides",min:6,howto:"Light and controlled.",ex:[
       {n:"Cable Kickback",m:"load",s:"2 × 12–15/side",mus:"Glutes",k:"Isolation",
         steps:["Ankle cuff on, hold the frame, hinge forward slightly.","Kick your heel back and slightly out, squeeze.","Return without arching your lower back."],
-        tip:"Stop each rep when your hip is straight. Going further just bends your lower back."}]}
+        tip:"Stop each rep when your hip is straight. Going further just bends your lower back."}]},
+    {kind:"bonus",optional:true,label:"Optional · shoulders + posture",rest:"45–60s after the pair",min:8,howto:"If you have time. These come out of cardio first. Everything still ends by about 0:55, and running up to 15 min over is fine. Trains your upper body twice a week instead of once. Shoulder shape is a big part of an overall toned look.",ex:[
+      {n:"Cable Lateral Raise",m:"load",s:"2 × 12–15/side",mus:"Side Delts",k:"Isolation",
+        steps:["Low pulley, stand side-on, handle in the far hand.","Raise out to shoulder height, leading with the elbow.","Lower slowly. Do all reps, then switch sides."],
+        tip:"Gives the shoulders a rounder shape, which also makes the waist look smaller."},
+      {n:"Cable Face Pull",m:"load",s:"2 × 12–15",mus:"Rear Delts, Upper Back",k:"Pull",
+        steps:["Rope at face height.","Pull toward your forehead with elbows high.","Squeeze, then control back."],
+        tip:"Helps posture: shoulders sit back instead of rounding forward."}]}
    ]},
   Tue:{abbr:"TUE",name:"Tuesday",label:"Rest",tag:"RECOVERY",desc:"6:00 wake · long walk + mobility",type:"rest",
     text:"Rest before Wednesday's 5:30 AM abduction-first day. Keep anything you do gentle. Dance class fits better on Thursday than tonight.",
@@ -535,7 +576,14 @@ const PROGRAMS = {
     {kind:"straight",label:"Glute-focused extension",rest:"75s",min:7,howto:"A back extension set up to work the glutes instead of the lower back.",ex:[
       {n:"45° Back Extension (glute focus)",m:"load",s:"3 × 12–15",mus:"Glutes, Hamstrings",k:"Hinge",
         steps:["Pad just below the hip crease, toes turned slightly out.","Round your upper back slightly and lower.","Rise by squeezing your glutes, stopping when your body is straight."],
-        tip:"Rounding the upper back and turning the toes out keeps the work on the glutes."}]}
+        tip:"Rounding the upper back and turning the toes out keeps the work on the glutes."}]},
+    {kind:"bonus",optional:true,label:"Optional · back + chest",rest:"60s after the pair",min:8,howto:"If you have time. These come out of cardio first. Everything still ends by about 0:55, and running up to 15 min over is fine. A second weekly session for your back and chest.",ex:[
+      {n:"Lat Pulldown",m:"load",s:"2 × 10–12",mus:"Lats, Upper Back",k:"Pull",
+        steps:["Grip just outside shoulder width, thighs under the pad.","Pull your elbows down to your ribs, bar to the upper chest.","Control it up."],
+        tip:"With Friday's pulldowns, your back trains twice a week."},
+      {n:"Push-Up",m:"reps",s:"2 × as many as you can",mus:"Chest, Triceps, Core",k:"Push",
+        steps:["Straight line from head to heels (knees down is fine).","Lower your chest close to the floor, elbows about 45°.","Press back up to lockout."],
+        tip:"Stop each set 1–2 reps before your form breaks. When you can do 15 on your knees, try full push-ups."}]}
    ]},
   Thu:{abbr:"THU",name:"Thursday",label:"Rest",tag:"RECOVERY",desc:"6:00 wake · easy walk",type:"rest",
     text:"Rest between Wednesday's glute day and Friday's upper day. Best evening for your optional dance class.",
@@ -563,7 +611,14 @@ const PROGRAMS = {
         tip:"Abduction from a different angle. Keep it light; Wednesday is the heavy abduction day."},
       {n:"Dead Bug",m:"reps",s:"2 × 8–10/side",mus:"Deep Core",k:"Core",
         steps:["On your back, arms up, knees at 90°.","Lower the opposite arm and leg, stopping above the floor.","Return and switch sides."],
-        tip:"Keep your lower back pressed into the floor the whole time."}]}
+        tip:"Keep your lower back pressed into the floor the whole time."}]},
+    {kind:"bonus",optional:true,label:"Optional · arms",rest:"45–60s after the pair",min:7,howto:"If you have time. These come out of cardio first. Everything still ends by about 0:55, and running up to 15 min over is fine. Friday is your short day, so this fits easily.",ex:[
+      {n:"Triceps Pressdown",m:"load",s:"2 × 12–15",mus:"Triceps",k:"Isolation",
+        steps:["Elbows pinned to your sides.","Push the rope down to full lockout and spread it at the bottom.","Let it rise slowly."],
+        tip:"Firms the back of the upper arm. The fat on top of it comes off with overall fat loss, not from this exercise."},
+      {n:"DB Curl",m:"load",s:"2 × 12–15",mus:"Biceps",k:"Isolation",
+        steps:["Palms forward, elbows by your sides.","Curl up without swinging and squeeze.","Lower over 2 seconds."],
+        tip:"Light, strict reps. Arm shape comes slowly, so keep logging the weight."}]}
    ]},
   Sat:{abbr:"SAT",name:"Saturday",label:"Glutes C",tag:"GLUTES · VOLUME",desc:"Hip thrust, leg press, abduction, step-up",type:"workout",
    share:"You both use the leg press today. Take it right after hip thrusts (about 0:16–0:25); Don needs it from about 0:28.",
@@ -584,7 +639,14 @@ const PROGRAMS = {
     {kind:"straight",label:"Finisher",rest:"45s between legs",min:7,howto:"Single-leg work to finish.",ex:[
       {n:"DB Step-Up",m:"load",s:"2 × 10–12/leg",mus:"Glutes, Quads",k:"Unilateral",
         steps:["Box about knee height, whole foot on the box.","Lean slightly forward and drive through the heel to stand.","Lower slowly. Push off the back leg as little as possible."],
-        tip:"If Saturday ever feels like too much, cut this one first."}]}
+        tip:"If Saturday ever feels like too much, cut this one first."}]},
+    {kind:"bonus",optional:true,label:"Optional · core",rest:"45s after the pair",min:7,howto:"If you have time. These come out of cardio first. Everything still ends by about 0:55, and running up to 15 min over is fine. Core strength helps your lifts and posture.",ex:[
+      {n:"Cable Crunch",m:"load",s:"2 × 12–15",mus:"Abs",k:"Core",
+        steps:["Kneel facing the cable with the rope beside your head.","Curl your ribs toward your hips, rounding your spine.","Return slowly; hips stay still."],
+        tip:"Builds the ab muscles. It won't burn belly fat directly; the calorie deficit does that."},
+      {n:"Cable Pallof Press",m:"load",s:"2 × 10/side",mus:"Core (anti-rotation)",k:"Core",
+        steps:["Cable at chest height, stand side-on, handle at your sternum.","Press straight out and hold 2 seconds.","Bring it back in. Do all reps, then switch sides."],
+        tip:"Trains your core to resist twisting, which keeps your waist braced on hip thrusts."}]}
    ]},
   Sun:{abbr:"SUN",name:"Sunday",label:"Rest",tag:"RECOVERY",desc:"Easy movement",type:"rest",
     text:"Long, easy stretches after the week's glute work.",
@@ -735,17 +797,20 @@ function renderDays(){
 }
 function selectDay(dk){ day=dk; renderDays(); const host=document.getElementById("panel"); host.innerHTML=""; host.appendChild(buildPanel(dk)); updateProgress(dk); }
 
-function liftMinutes(p,dk){ const d=PROGRAMS[p][dk]; return d.type==="workout"?d.blocks.reduce((s,b)=>s+b.min,0):0; }
+function liftMinutes(p,dk){ const d=PROGRAMS[p][dk]; return d.type==="workout"?d.blocks.filter(b=>!b.optional).reduce((s,b)=>s+b.min,0):0; }
+function optMinutes(p,dk){ const d=PROGRAMS[p][dk]; return d.type==="workout"?d.blocks.filter(b=>b.optional).reduce((s,b)=>s+b.min,0):0; }
 
 function clockHTML(dk){
   const lanes=PROFILES.map(p=>{
     const d=PROGRAMS[p][dk]; const lift=liftMinutes(p,dk);
     const end=WARMUP+lift; const cardio=Math.max(0,FINISH-end);
     let segs=`<div class="seg w" style="width:${WARMUP/CAP*100}%" title="Warm-up together">WU</div>`;
-    d.blocks.forEach((b,i)=>{ segs+=`<div class="seg ${p}${i%2?" alt":""}" style="width:${b.min/CAP*100}%" title="${esc(b.label)} · ${b.min} min">${b.min>=9?b.min+"′":""}</div>`; });
-    segs+=`<div class="seg c" style="width:${cardio/CAP*100}%" title="${CARDIO[p]} · ${cardio} min">${cardio>=7?"cardio":""}</div>`;
-    segs+=`<div class="seg b" style="width:${(CAP-FINISH)/CAP*100}%"></div>`;
-    return {p,lift,end,cardio,html:`<div class="lane"><span class="lane-name${p===profile?" you":""}">${NAME[p].toUpperCase()}</span><div class="bar" role="img" aria-label="${NAME[p]}: lifting until ${fmt(end)}, then ${cardio} minutes of cardio">${segs}</div></div>`};
+    d.blocks.filter(b=>!b.optional).forEach((b,i)=>{ segs+=`<div class="seg ${p}${i%2?" alt":""}" style="width:${b.min/CAP*100}%" title="${esc(b.label)} · ${b.min} min">${b.min>=9?b.min+"′":""}</div>`; });
+    const opt=optMinutes(p,dk), optEnd=end+opt, cardioX=Math.max(0,FINISH-optEnd), over=Math.max(0,optEnd-FINISH);
+    if(opt) segs+=`<div class="seg opt" style="width:${opt/CAP*100}%" title="Optional extras · ${opt} min">${opt>=7?"+opt":""}</div>`;
+    segs+=`<div class="seg c" style="width:${cardioX/CAP*100}%" title="${CARDIO[p]} · ${cardioX} min">${cardioX>=7?"cardio":""}</div>`;
+    segs+=`<div class="seg b" style="width:${Math.max(0,CAP-FINISH-over)/CAP*100}%"></div>`;
+    return {p,lift,end,cardio,opt,optEnd,cardioX,html:`<div class="lane"><span class="lane-name${p===profile?" you":""}">${NAME[p].toUpperCase()}</span><div class="bar" role="img" aria-label="${NAME[p]}: lifting until ${fmt(end)}, then ${cardio} minutes of cardio">${segs}</div></div>`};
   });
   const me=lanes.find(l=>l.p===profile), other=lanes.find(l=>l.p!==profile);
   const gap=Math.abs(me.end-other.end);
@@ -758,6 +823,7 @@ function clockHTML(dk){
     ${lanes.map(l=>l.html).join("")}
     <div class="axis"><span></span><div class="ticks"><span style="left:0">0</span><span style="left:25%">15</span><span style="left:50%">30</span><span style="left:75%">45</span><span style="left:100%">60</span></div></div>
     <p class="lane-note">${note} Your cardio: <b>${me.cardio} min</b>; pick the machine in the cardio block at the bottom.</p>
+    ${me.opt?`<p class="lane-note">Striped = <b>optional extras</b> (+${me.opt} min). With them, lifting ends about ${fmt(me.optEnd)} and cardio drops to ${me.cardioX} min${me.optEnd>FINISH?`, running ${me.optEnd-FINISH} min past 0:55`:""}.</p>`:""}
     <div class="share">${esc(PROGRAMS[profile][dk].share)}</div>
   </div>`;
 }
@@ -774,10 +840,10 @@ function buildPanel(dk){
   head+=fuelHTML(dk)+clockHTML(dk)+`<div class="pbar"><div class="pfill" id="pfill"></div></div>`;
   let body="", gi=0;
   d.blocks.forEach(bl=>{
-    const cls=bl.kind==="finisher"?"finisher":(bl.kind==="straight"?"straight":"");
+    const cls=bl.kind==="finisher"?"finisher":(bl.kind==="straight"?"straight":(bl.kind==="bonus"?"bonus":""));
     body+=`<div class="block ${cls}"><div class="block-label"><span class="pill">${bl.label}</span><span class="rest-lbl">rest ${bl.rest} · ~${bl.min} min</span></div><div class="howto">${bl.howto}</div>`;
     bl.ex.forEach((ex,ei)=>{
-      if(ei>0) body+=`<div class="connector"><div class="cline"></div><span class="ctext">${bl.kind==="superset"?"THEN →":"NEXT"}</span><div class="cline"></div></div>`;
+      if(ei>0) body+=`<div class="connector"><div class="cline"></div><span class="ctext">${bl.kind==="superset"||bl.kind==="bonus"?"THEN →":"NEXT"}</span><div class="cline"></div></div>`;
       body+=exCard(dk,gi++,ex);
     });
     body+=`</div>`;
@@ -856,7 +922,7 @@ function commitHistory(dk,id){
 function updateProgress(dk){
   const d=PROGRAMS[profile][dk]; if(d.type!=="workout") return;
   let total=0,done=0;
-  d.blocks.forEach(b=>b.ex.forEach(ex=>{ total++; const c=DATA.current[dk]&&DATA.current[dk][exId(dk,ex.n)]; if(c&&c.done) done++; }));
+  d.blocks.filter(b=>!b.optional).forEach(b=>b.ex.forEach(ex=>{ total++; const c=DATA.current[dk]&&DATA.current[dk][exId(dk,ex.n)]; if(c&&c.done) done++; }));
   total++; if(DATA.current[dk]&&DATA.current[dk].cardio&&DATA.current[dk].cardio.done) done++;
   const f=document.getElementById("pfill"); if(f) f.style.width=Math.round(done/total*100)+"%";
 }
@@ -901,7 +967,7 @@ function cardioHTML(dk){
   const opts=CARDIO_ORDER[profile].map(k=>{ const o=CARDIO_OPTS[k];
     return `<button class="copt${c.m===k?" on":""}" onclick="pickCardio('${dk}','${k}')" aria-pressed="${c.m===k}"><span class="copt-n">${o.n}${k===CARDIO_PICK[profile][dk]?' <em>suggested</em>':""}</span><span class="copt-s">${o.set}</span></button>`; }).join("");
   return `<div class="block cardio${c.done?" isdone":""}" id="cardio-block">
-    <div class="block-label"><span class="pill">Cardio together · ${plan} min</span><span class="rest-lbl">start ~${fmt(start)} · end ${fmt(FINISH)}</span></div>
+    <div class="block-label"><span class="pill">Cardio together · ${plan} min${optMinutes(profile,dk)?` · ${Math.max(0,plan-optMinutes(profile,dk))} after extras`:""}</span><span class="rest-lbl">start ~${fmt(start)} · end ${fmt(FINISH)}</span></div>
     <div class="howto">Easy pace: you should be able to talk in full sentences. ${together} ${CARDIO_WHY[profile][dk]||""}</div>
     <div class="ex" id="ex-cardio"><div class="ex-head">
       <button class="check" onclick="toggleCardio('${dk}')" aria-label="Mark cardio done"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
@@ -974,7 +1040,7 @@ function renderProgress(){
 function weeklyRows(p){
   const tally={};
   DAY_KEYS.forEach(dk=>{ const d=PROGRAMS[p][dk]; if(d.type!=="workout") return;
-    d.blocks.forEach(b=>b.ex.forEach(ex=>{ const n=ex.n.replace(/ \(.*\)/,""); tally[n]=(tally[n]||0)+setCount(ex.s); })); });
+    d.blocks.forEach(b=>b.ex.forEach(ex=>{ const n=ex.n.replace(/ \(.*\)/,""); const t=tally[n]||(tally[n]={c:0,o:0}); t[b.optional?"o":"c"]+=setCount(ex.s); })); });
   return tally;
 }
 function renderPlan(){
@@ -983,16 +1049,17 @@ function renderPlan(){
     return `<tr><td>${dk}</td><td>${PROGRAMS.don[dk].label}</td><td class="n">${fmt(a)}</td><td>${PROGRAMS.dars[dk].label}</td><td class="n">${fmt(b)}</td><td class="n">${Math.abs(a-b)} min</td></tr>`;
   }).join("");
   const t=weeklyRows(profile);
-  const vol=Object.entries(t).map(([n,s])=>`<tr><td>${n}</td><td class="n">${s}</td></tr>`).join("");
+  const vol=Object.entries(t).map(([n,s])=>`<tr><td>${n}</td><td class="n">${s.c||"–"}${s.o?` <span class="optn">+${s.o} optional</span>`:""}</td></tr>`).join("");
   document.getElementById("planview").innerHTML=`<div class="notes">
     <div class="note"><h4>How the hour runs</h4><ul>
       <li><b>0:00–0:05</b> warm up together: easy bike or incline walk, then a few light sets of your first lift.</li>
-      <li><b>0:05–about 0:43</b> each of you does your own lifting. Each day is planned at 34–39 min.</li>
+      <li><b>0:05–about 0:43</b> each of you does your own lifting.</li>
+      <li><b>Optional extras</b> (dashed block, 7–8 min) come next if you have time. They take from cardio first; running up to 15 min past the hour is fine.</li>
       <li><b>About 0:43–0:55</b> easy cardio side by side. Whoever finishes lifting first starts first.</li>
       <li><b>0:55–1:00</b> spare time for a busy machine or a stretch. You never pass the hour.</li>
       <li><b>After:</b> optional cold shower. Shower warm, then finish with 30–90 seconds cold. Keep it short; skip ice baths on lifting days.</li></ul></div>
     <div class="note"><h4>Finish times</h4><div class="tbl"><table class="wide"><thead><tr><th>Day</th><th>Don</th><th>Lifting ends</th><th>Dars</th><th>Lifting ends</th><th>Gap</th></tr></thead><tbody>${rows}</tbody></table></div>
-      <p style="margin-top:8px">Friday's gap is on purpose. Dars's upper-body day is maintenance, and extra exercises would only fill time. She uses the gap for an easy incline walk.</p></div>
+      <p style="margin-top:8px">Times are for the core plan. Friday is Dars's short day; her optional arm work fits in the gap.</p></div>
     <div class="note"><h4>Calories</h4><div class="tbl"><table class="wide"><thead><tr><th></th><th>Burn est.</th><th>Gym days</th><th>Rest days</th><th>Week avg</th></tr></thead><tbody>
       ${PROFILES.map(p=>{const F=FUEL[p],w=weekAvg(p);return `<tr><td>${NAME[p]}</td><td class="n">~${fmtK(w.burn)}</td><td class="n">${fmtK(F.train.kcal)}</td><td class="n">${fmtK(F.rest.kcal)}</td><td class="n">${fmtK(w.eat)}</td></tr>`;}).join("")}
       </tbody></table></div>
@@ -1010,8 +1077,8 @@ function renderPlan(){
       <li>If a superset station is busy or the switch feels awkward, do the two exercises as normal sets.</li></ul></div>
     <div class="note"><h4>${NAME[profile]}'s weekly sets</h4><div class="tbl"><table><thead><tr><th>Exercise</th><th>Sets / week</th></tr></thead><tbody>${vol}</tbody></table></div>
       <p style="margin-top:8px">${profile==="dars"
-        ?"Hip thrust, abduction, kickbacks and glute-focused back extensions work the glutes directly. Split squats, step-ups, leg press and RDLs help but spread the work across other muscles too, so don't count every set the same. If soreness lingers, lifts go backwards, or you feel worn out at the next session, cut step-ups and then leg press first. Keep the abduction work."
-        :"Balanced week: back about 11 sets (plus face pulls) against chest 8, so pulling slightly outweighs pressing. Side delts 8 sets over three days, core 9 sets over three days (knee raise, Pallof press, cable crunch). Squat and deadlift are your strength lifts; the Progress tab shows your estimated 1RM against bodyweight-based levels."}</p></div>
+        ?"Glutes get about 20 sets a week in the core plan, plenty for growth. The optional extras add upper-body work on Monday, Wednesday and Saturday, so shoulders, back, arms and core each get 4–8 sets a week across two days: enough to add shape for an overall toned look. Hip thrust, abduction, kickbacks and glute-focused back extensions work the glutes directly. Split squats, step-ups, leg press and RDLs help but spread the work across other muscles too, so don't count every set the same. If soreness lingers, lifts go backwards, or you feel worn out at the next session, cut step-ups and then leg press first. Keep the abduction work."
+        :"Core plan: back ~11, chest 8, side delts 8, quads 8, core 9 sets a week. With the optional extras: chest 11, side delts 10, rear delts 4 plus rows, triceps 9 and biceps 9–10 (counting rows and presses at half), quads 10, calves 8. Those are the muscles that shape an aesthetic upper body. Squat and deadlift stay your strength lifts; the Progress tab shows your estimated 1RM against bodyweight-based levels."}</p></div>
   </div>`;
 }
 
@@ -1084,7 +1151,7 @@ const GEAR={
     setup:"Slide the pulley to the height listed in the exercise and clip on the attachment (rope, D-handle or ankle cuff). Choose the weight with the pin.",
     alt:"Any other cable station; resistance bands in a pinch.",q:"how to use cable machine gym beginner attachments"},
   assistPullup:{n:"Assisted pull-up machine / pull-up bar",short:"Pull-up station",area:"Bodyweight",
-    setup:"On the assisted machine, more weight on the stack means more help. Kneel on the pad, then grip the handles.",
+    setup:"On the assisted machine, more weight on the stack means more help. Kneel on the pad, then grip the handles. The same machine has dip handles.",
     alt:"Lat pulldown.",q:"how to use assisted pull up machine"},
   pecDeck:{n:"Pec deck (fly machine)",short:"Pec deck",area:"Machines",
     setup:"Seat height so the handles line up with mid-chest. Set the arm start position so you feel a stretch, not shoulder pain.",
@@ -1133,7 +1200,9 @@ const EX_GEAR={
   "Pull-Up (assisted if needed)":"assistPullup","Pec Deck":"pecDeck","Chest-Supported Row":"csRow","DB Curl":"dumbbells",
   "Conventional Deadlift":"barbell","Leg Press":"legPress","Leg Press (feet high & wide)":"legPress","Machine Chest Press":"chestPress",
   "Hip Thrust":"hipThrust","Bulgarian Split Squat":"dumbbells","Hip Abduction Machine":"abduction","Dead Bug":"mat",
-  "45° Back Extension (glute focus)":"backExt","45° Back Extension":"backExt","DB Step-Up":"box"
+  "45° Back Extension (glute focus)":"backExt","45° Back Extension":"backExt","DB Step-Up":"box",
+  "Cable Fly":"cable","Overhead Cable Triceps Extension":"cable","Cable Lateral Raise":"cable","Incline DB Curl":"adjBench",
+  "Reverse Pec Deck":"pecDeck","Assisted Dip":"assistPullup","Push-Up":"mat"
 };
 function gearOf(ex){ return GEAR[ex.eq||EX_GEAR[ex.n]]; }
 function gearKey(ex){ return ex.eq||EX_GEAR[ex.n]; }
