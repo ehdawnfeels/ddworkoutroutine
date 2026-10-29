@@ -219,6 +219,16 @@
   .fuel-note{font-size:11.5px;color:var(--muted);line-height:1.5}
   .fuel-note b{color:var(--text2)}
   .restcard{margin-top:0}
+  /* research */
+  .refs{list-style:none;padding:0!important;display:flex;flex-direction:column;gap:9px}
+  .refs li{display:grid;grid-template-columns:74px 1fr;gap:10px;align-items:start}
+  .refs li b{display:block;font-weight:600;color:var(--text);font-size:12.5px;line-height:1.5}
+  .refs .src{display:block;font-size:11px;color:var(--muted);line-height:1.45;margin-top:2px}
+  .refs .src a{color:var(--blue);text-decoration:none}
+  .grade{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:3px 0;border-radius:4px;text-align:center;border:1px solid var(--border);color:var(--text2)}
+  .g-strong{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+  .g-moderate{background:color-mix(in srgb,var(--blue) 12%,transparent);border-color:var(--blue);color:var(--blue)}
+  .g-limited{background:color-mix(in srgb,var(--orange) 12%,transparent);border-color:var(--orange);color:var(--orange)}
   /* optional extras */
   .block.bonus{border:1px dashed var(--accent);background:color-mix(in srgb,var(--accent) 4%,transparent)}
   .block.bonus .pill{background:transparent;color:var(--accent);border:1px dashed var(--accent)}
@@ -435,7 +445,7 @@ const PROGRAMS = {
         tip:"The cable keeps tension at the bottom, where dumbbells go slack. Takes side delts to 10 sets a week."},
       {n:"Incline DB Curl",m:"load",s:"2 × 10–15",mus:"Biceps",k:"Isolation",
         steps:["Bench at 45–60°, arms hanging straight down.","Curl without letting your elbows drift forward.","Lower all the way to a full stretch."],
-        tip:"Lying back puts the biceps on a stretch, which adds growth stimulus compared with standing curls."}]}
+        tip:"A 2025 trial found incline curls grow the upper part of the biceps more than preacher curls. It adds variety to your regular curls."}]}
    ]},
   Thu:{abbr:"THU",name:"Thursday",label:"Zone 2",tag:"OPTIONAL CARDIO",desc:"Brisk 6:15 AM walk with Dustin",type:"rest",
     text:"Your optional Zone 2 is the 6:15 AM walk with Dustin, kept brisk (see the Week tab). Easy enough that it doesn't take away from Friday and Saturday.",
@@ -539,7 +549,7 @@ const PROGRAMS = {
     {kind:"straight",label:"Abduction",rest:"60–75s",min:7,howto:"Loaded and progressed like a real lift.",ex:[
       {n:"Hip Abduction Machine",m:"load",s:"3 × 12–20",mus:"Glute Med, Upper Glute",k:"Isolation",main:true,
         steps:["Sit, then lean your torso forward over your thighs.","Push your knees out as wide as you can and pause 1 second.","Return slowly without letting the plates touch."],
-        tip:"Leaning forward puts more of the work on the upper glute fibres than sitting upright.",
+        tip:"EMG studies show upper-glute activity rises as the hip bends more, so leaning forward likely targets it more. Likely, but not yet proven for growth.",
         cue:"All sets at 20 → next plate."}]},
     {kind:"straight",label:"Finisher",rest:"30s between sides",min:6,howto:"Light and controlled.",ex:[
       {n:"Cable Kickback",m:"load",s:"2 × 12–15/side",mus:"Glutes",k:"Isolation",
@@ -1043,6 +1053,25 @@ function weeklyRows(p){
     d.blocks.forEach(b=>b.ex.forEach(ex=>{ const n=ex.n.replace(/ \(.*\)/,""); const t=tally[n]||(tally[n]={c:0,o:0}); t[b.optional?"o":"c"]+=setCount(ex.s); })); });
   return tally;
 }
+
+const REFS=[
+  ["Weekly sets drive growth: more sets, smaller extra gains. ~10–20 hard sets per muscle is a sound target.","Strong","Schoenfeld, Ogborn & Krieger 2017 meta-analysis; Pelland et al. 2024 meta-regression (preprint)","https://doi.org/10.1080/02640414.2016.1210197"],
+  ["Indirect work (rows for biceps, presses for triceps) counts as about half a set.","Moderate","Pelland et al. 2024: fractional counting fit the data best","https://sportrxiv.org/index.php/server/preprint/view/537"],
+  ["Sets ending closer to failure build more muscle; strength gains are similar across efforts.","Moderate","Robinson et al. 2024, Sports Medicine meta-regression",""],
+  ["Anywhere from ~5 to 30 reps builds similar muscle when sets are hard; heavier loads build more strength.","Strong","Schoenfeld et al. 2017, J Strength Cond Res meta-analysis (21 studies)","https://pubmed.ncbi.nlm.nih.gov/28834797/"],
+  ["Overhead triceps extensions grew the triceps more than pushdowns (~28% vs ~20% for the long head).","Moderate","Maeo et al., Eur J Sport Sci (12-week trial, 21 untrained adults)","https://doi.org/10.1080/17461391.2022.2100279"],
+  ["Incline curls grow the upper biceps more; preacher curls grow the lower biceps more.","Moderate","Int J Sports Med 2025 (8 weeks, 63 untrained women)","https://pubmed.ncbi.nlm.nih.gov/39809454/"],
+  ["Leaning forward on the abduction machine targets the upper glute more.","Limited","EMG activation studies at different hip angles; growth not yet tested","https://pmc.ncbi.nlm.nih.gov/articles/PMC3944285"],
+  ["Little extra muscle gain above ~1.6 g protein per kg; 0.8 g/lb (~1.75 g/kg) leaves a margin.","Strong","Morton et al. 2018, Br J Sports Med (49 studies). The exact cutoff is uncertain and may sit a little higher","https://openrepository.aut.ac.nz/items/8dea98a4-4e37-4c60-be43-4b6ece0bd9a5"],
+  ["Building muscle while losing fat (recomp) is possible with lifting, enough protein and a small deficit.","Moderate","Barakat et al. 2020, Strength Cond J review","https://doi.org/10.1519/SSC.0000000000000584"],
+  ["Ice baths right after lifting reduced muscle and strength gains. Short cold showers haven't been studied.","Limited","Roberts et al. 2015, J Physiol (21 men, 10-min cold immersion)","https://doi.org/10.1113/JP270570"],
+  ["Calorie targets are formula estimates (Mifflin-St Jeor + activity), typically within ~10%.","Estimate","Confirm with 2–3 weeks of weigh-ins and waist measurements",""]
+];
+function refsHTML(){
+  return `<div class="note"><h4>What the research says</h4>
+    <p style="margin-bottom:10px">How well each part of this plan is supported. <b>Strong</b>: several studies or a meta-analysis agree. <b>Moderate</b>: one good trial or a newer analysis. <b>Limited</b>: indirect evidence only.</p>
+    <ul class="refs">${REFS.map(([c,g,src,url])=>`<li><span class="grade g-${g.toLowerCase()}">${g}</span><div><b>${c}</b><span class="src">${url?`<a href="${url}" target="_blank" rel="noopener">${src} ↗</a>`:src}</span></div></li>`).join("")}</ul></div>`;
+}
 function renderPlan(){
   const rows=DAY_KEYS.filter(dk=>PROGRAMS.don[dk].type==="workout").map(dk=>{
     const a=WARMUP+liftMinutes("don",dk), b=WARMUP+liftMinutes("dars",dk);
@@ -1069,6 +1098,7 @@ function renderPlan(){
       <li><b>These are estimates.</b> Weigh in most mornings and compare weekly averages after 2–3 weeks.</li>
       <li><b>Don:</b> aim for a drop of about 0.1–0.25 kg a week. Losing faster, or lifts stalling? Add 150 kcal a day. Not moving after 3 weeks? Take off 100–150.</li>
       <li><b>Dars:</b> measure her waist at the navel every 2 weeks; it matters more than the scale. Aim for about 0.1–0.2 kg a week down. If hip thrust and abduction weights stall for 2+ weeks, or she's dropping faster, add 100–150 kcal a day. Once her midsection is where she wants it, move up to maintenance (~1,625 average) for glute growth.</li></ul></div>
+    ${refsHTML()}
     <div class="note"><h4>How to progress</h4><ul>
       <li>Most sets end with about <b>2 good reps left</b>.</li>
       <li>When every set reaches the top of the rep range with clean form, <b>add a little weight</b> next time.</li>
